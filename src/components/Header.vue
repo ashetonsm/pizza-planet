@@ -24,6 +24,24 @@ h1 {
     align-items: center;
     padding-top: 10px;
 }
+
+.header_logo img {
+    max-width: 25vw;
+}
+
+ul {
+    padding: 10px 0;
+}
+
+li {
+    display: inline-block;
+}
+
+@media screen and (min-width: 900px) {
+    .header_logo img {
+        max-width: 20vw;
+    }
+}
 </style>
 <template>
     <header>
