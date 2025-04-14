@@ -1,7 +1,9 @@
 <script lang="ts">
+
 export default {
     data(vm) {
         return {
+            basket: [],
             getMenuItems: {
                 1: {
                     'name': 'Margherita',
@@ -40,6 +42,25 @@ export default {
             }
         }
     },
+    methods: {
+        async addToBasket(item: { name: string; description: string; options: { size: number; price: number; }[]; } | { name: string; description: string; options: { size: number; price: number; }[]; } | { name: string; description: string; options: { size: number; price: number; }[]; }, options: { size: number; price: number; } | { size: number; price: number; } | { size: number; price: number; }) {
+            const pizzaExists = await this.basket.find(
+                pizza => pizza.name === item.name && pizza.size === options.size
+            )
+
+            if (pizzaExists) {
+                pizzaExists.quantity++;
+                return
+            }
+
+            this.basket.push({
+                name: item.name,
+                price: options.price,
+                size: options.size,
+                quantity: 1
+            })
+        }
+    },
     name: "Menu"
 }
 </script>
@@ -64,11 +85,13 @@ export default {
                     <tr v-for="(option, index) in item.options">
                         <td :key="index">{{ option.size }}"</td>
                         <td :key="index">${{ option.price }}</td>
-                        <td><button type="button" class="btn_green">+</button></td>
+                        <td><button type="button" class="btn_green" @click="addToBasket(item, option)">+</button></td>
                     </tr>
                 </tbody>
             </table>
         </div>
+        <h1>Basket:</h1>
+        {{ basket }}
     </div>
 </template>
 
