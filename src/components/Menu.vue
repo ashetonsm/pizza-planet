@@ -1,5 +1,45 @@
 <script lang="ts">
 export default {
+    data(vm) {
+        return {
+            getMenuItems: {
+                1: {
+                    'name': 'Margherita',
+                    'description': 'A delicious tomato based pizza topped with mozzarella',
+                    'options': [{
+                        'size': 9,
+                        'price': 6.95
+                    }, {
+                        'size': 12,
+                        'price': 10.95
+                    }]
+                },
+                2: {
+                    'name': 'Pepperoni',
+                    'description': 'A delicious tomato based pizza topped with mozzarella and pepperoni',
+                    'options': [{
+                        'size': 9,
+                        'price': 7.95
+                    }, {
+                        'size': 12,
+                        'price': 12.95
+                    }]
+                },
+                3: {
+                    'name': 'Ham and Pineapple',
+                    'description': 'A delicious tomato based pizza topped with mozzarella, ham and pineapple',
+                    'options': [{
+                        'size': 9,
+                        'price': 7.95
+                    }, {
+                        'size': 12,
+                        'price': 12.95
+                    }]
+                }
+
+            }
+        }
+    },
     name: "Menu"
 }
 </script>
@@ -10,22 +50,20 @@ export default {
             <h1>Menu</h1>
 
             <h3>Pizza</h3>
-            <table>
+            <table v-for="item in getMenuItems" :key="item.name">
                 <tbody>
                     <tr>
-                        <td><strong>~Pepperoni~</strong></td>
+                        <td><strong>~{{ item.name }}~</strong></td>
                     </tr>
                     <tr>
                         <td>
-                            <small>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magnam porro magni dicta
-                                debitis. Vel in reiciendis officiis dolorum quas, corporis vero ab voluptates laborum
-                                unde nulla, eum possimus, provident a?
+                            <small>{{ item.description }}
                             </small>
                         </td>
                     </tr>
-                    <tr>
-                        <td>9"</td>
-                        <td>$6.95</td>
+                    <tr v-for="(option, index) in item.options">
+                        <td :key="index">{{ option.size }}"</td>
+                        <td :key="index">${{ option.price }}</td>
                         <td><button type="button" class="btn_green">+</button></td>
                     </tr>
                 </tbody>
