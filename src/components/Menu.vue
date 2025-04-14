@@ -1,5 +1,18 @@
 <script lang="ts">
 
+type Item = {
+    name: string;
+    description: string;
+    options: {
+        size: number;
+        price: number;
+    }[]
+}
+type Options = {
+    size: number;
+    price: number;
+}
+
 export default {
     data(vm) {
         return {
@@ -43,8 +56,9 @@ export default {
         }
     },
     methods: {
-        async addToBasket(item: { name: string; description: string; options: { size: number; price: number; }[]; } | { name: string; description: string; options: { size: number; price: number; }[]; } | { name: string; description: string; options: { size: number; price: number; }[]; }, options: { size: number; price: number; } | { size: number; price: number; } | { size: number; price: number; }) {
-            const pizzaExists = await this.basket.find(
+        async addToBasket(item: Item, options: Options) {
+
+            const pizzaExists = await (this.basket as unknown as any[]).find(
                 pizza => pizza.name === item.name && pizza.size === options.size
             )
 
@@ -53,7 +67,8 @@ export default {
                 return
             }
 
-            this.basket.push({
+
+            (this.basket as unknown as any[]).push({
                 name: item.name,
                 price: options.price,
                 size: options.size,
