@@ -4,6 +4,23 @@ export interface Header {
 };
 import { RouterLink, RouterView } from 'vue-router'
 </script>
+
+<template>
+    <header>
+        <div class="header_logo">
+            <img src="../assets/images/planet.png" alt="Pizza Planet Icon">
+            <h1 href="/">Pizza Planet</h1>
+            <nav>
+                <RouterLink to="/">Home</RouterLink>
+                <RouterLink to="/menu">Menu</RouterLink>
+                <RouterLink to="/contact">Contact</RouterLink>
+                <RouterLink to="/about">About</RouterLink>
+            </nav>
+        </div>
+    </header>
+    <RouterView />
+</template>
+
 <style scoped>
 h1 {
     font-size: 1.3em;
@@ -29,35 +46,9 @@ h1 {
     max-width: 25vw;
 }
 
-ul {
-    padding: 10px 0;
-}
-
-li {
-    display: inline-block;
-}
-
 @media screen and (min-width: 900px) {
     .header_logo img {
         max-width: 20vw;
     }
 }
 </style>
-<template>
-    <header>
-        <div class="header_logo">
-            <img src="../assets/images/planet.png" alt="Pizza Planet Icon">
-            <h1 href="/">Pizza Planet</h1>
-        </div>
-
-        <div class="wrapper">
-            <nav>
-                <RouterLink to="/">Home</RouterLink>
-                <RouterLink to="/menu">Menu</RouterLink>
-                <RouterLink to="/contact">Contact</RouterLink>
-                <RouterLink to="/about">About</RouterLink>
-            </nav>
-        </div>
-    </header>
-    <RouterView />
-</template>

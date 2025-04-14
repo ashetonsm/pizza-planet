@@ -5,10 +5,10 @@ export default {
 </script>
 <template>
     <div class="menu_wrapper">
-        <h1>Menu</h1>
-
         <!-- Menu -->
         <div class="menu">
+            <h1>Menu</h1>
+
             <h3>Pizza</h3>
             <table>
                 <tbody>
@@ -33,3 +33,38 @@ export default {
         </div>
     </div>
 </template>
+
+<style scoped>
+h3 {
+    text-align: center;
+}
+
+.menu_wrapper {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.menu {
+    background-color: #f1e6ea;
+    border-radius: 3px;
+    height: 100vh;
+    margin: 10px;
+    padding: 10px;
+}
+
+@media screen and (min-width: 900px) {
+    .menu_wrapper {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .menu {
+        width: 65vw;
+    }
+}
+
+table {
+    color: black;
+}
+</style>
