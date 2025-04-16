@@ -43,12 +43,12 @@ h1 {
 }
 
 .header_logo img {
-    max-width: 25vw;
+    max-width: 15vw;
 }
 
 @media screen and (min-width: 900px) {
     .header_logo img {
-        max-width: 20vw;
+        max-width: 10vw;
     }
 }
 </style>
