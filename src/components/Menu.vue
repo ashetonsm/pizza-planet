@@ -17,6 +17,7 @@ export default {
     data(vm) {
         return {
             basket: [],
+            basketText: 'Your basket is empty.',
             getMenuItems: {
                 1: {
                     'name': 'Margherita',
@@ -105,8 +106,31 @@ export default {
                 </tbody>
             </table>
         </div>
-        <h1>Basket:</h1>
-        {{ basket }}
+        <!-- shopping basket -->
+        <div class="basket">
+            <h1>Basket:</h1>
+            <div v-if="basket.length > 0">
+
+                <table>
+                    <tbody v-for="(item, index) in basket" :key="index">
+                        <tr>
+                            <td>
+                                <button class="btn_green">&#8722;</button>
+                                <span>{{ item.quantity }}</span>
+                                <button class="btn_green">+</button>
+                            </td>
+                            <td>{{ item.name }} {{ item.size }}"</td>
+                            <td>$ {{ item.price * item.quantity }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Order Total:</p>
+                <button class="btn_green">Place Order</button>
+            </div>
+            <div v-else>
+                <h3>{{ basketText }}</h3>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -118,10 +142,17 @@ h3 {
 .menu_wrapper {
     display: flex;
     flex-direction: column;
-
 }
 
 .menu {
+    background-color: #f1e6ea;
+    border-radius: 3px;
+    height: 100vh;
+    margin: 10px;
+    padding: 10px;
+}
+
+.basket {
     background-color: #f1e6ea;
     border-radius: 3px;
     height: 100vh;
@@ -136,7 +167,11 @@ h3 {
     }
 
     .menu {
-        width: 65vw;
+        width: 45vw;
+    }
+
+    .basket {
+        width: 25vw;
     }
 }
 
