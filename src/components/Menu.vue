@@ -75,7 +75,19 @@ export default {
                 size: options.size,
                 quantity: 1
             })
-        }
+        },
+        removeFromBasket(item) {
+            this.basket.splice(this.basket.indexOf(item), 1);
+        },
+        increaseQuantity(item) {
+            item.quantity++;
+        },
+        decreaseQuantity(item) {
+            item.quantity--;
+            if (item.quantity === 0) {
+                this.removeFromBasket(item);
+            }
+        },
     },
     name: "Menu"
 }
@@ -115,9 +127,9 @@ export default {
                     <tbody v-for="(item, index) in basket" :key="index">
                         <tr>
                             <td>
-                                <button class="btn_green">&#8722;</button>
+                                <button class="btn_green" @click="decreaseQuantity(item)">&#8722;</button>
                                 <span>{{ item.quantity }}</span>
-                                <button class="btn_green">+</button>
+                                <button class="btn_green" @click="increaseQuantity(item)">+</button>
                             </td>
                             <td>{{ item.name }} {{ item.size }}"</td>
                             <td>$ {{ item.price * item.quantity }}</td>
