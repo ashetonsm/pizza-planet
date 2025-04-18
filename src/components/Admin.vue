@@ -1,6 +1,11 @@
 <script lang="ts">
+import NewPizza from './NewPizza.vue';
+
 export default {
-    name: "Admin"
+    name: "Admin",
+    components: {
+        NewPizza
+    }
 }
 </script>
 <template>
@@ -8,6 +13,7 @@ export default {
         <div class="current_user_wrapper">
             Lorem
         </div>
+        <NewPizza></NewPizza>
         <div class="menu_wrapper">
             <table>
                 <thead>
