@@ -1,5 +1,5 @@
-<script setup lang="ts">
-export interface Header {
+<script lang="ts">
+export default {
     name: "appHeader"
 };
 import { RouterLink, RouterView } from 'vue-router'
