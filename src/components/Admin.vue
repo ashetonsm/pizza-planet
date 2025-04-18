@@ -9,7 +9,26 @@ export default {
             Lorem
         </div>
         <div class="menu_wrapper">
-            ipsum
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            Item:
+                        </th>
+                        <th>
+                            Remove from Menu
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Margherita</td>
+                        <td>
+                            <button type="button" class="btn_red">&times;</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div class="orders_wrapper">
             dolor
