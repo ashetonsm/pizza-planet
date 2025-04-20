@@ -1,18 +1,33 @@
 <script lang="ts">
 import NewPizza from './NewPizza.vue';
 import Login from './Login.vue';
+import { firebaseAuth } from '@/firebase';
+import { signOut } from 'firebase/auth';
+
 export default {
     name: "Admin",
     components: {
         NewPizza,
         Login
+    },
+    methods: {
+        async signOut() {
+            signOut(firebaseAuth).then(() => {
+                // Sign-out successful.
+                alert('You have been signed out. Goodbye!');
+            }).catch((error) => {
+                // An error occurred.
+                alert(`Sign out error: ${error}`);
+            })
+        }
     }
 }
 </script>
 <template>
     <div class="admin_wrapper">
         <div class="current_user_wrapper">
-            Lorem
+            <span>Logged in as:</span>
+            <button type="button" class="btn_red" @click="signOut()">Sign Out</button>
         </div>
         <NewPizza></NewPizza>
         <div class="menu_wrapper">
