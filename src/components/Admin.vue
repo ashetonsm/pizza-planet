@@ -1,10 +1,11 @@
 <script lang="ts">
 import NewPizza from './NewPizza.vue';
-
+import Login from './Login.vue';
 export default {
     name: "Admin",
     components: {
-        NewPizza
+        NewPizza,
+        Login
     }
 }
 </script>
@@ -71,6 +72,7 @@ export default {
                 </tbody>
             </table>
         </div>
+        <Login />
     </div>
 </template>
 
