@@ -3,6 +3,7 @@
 type Item = {
     name: string;
     description: string;
+    quantity: number;
     options: {
         size: number;
         price: number;
@@ -20,36 +21,36 @@ export default {
             basketText: 'Your basket is empty.',
             getMenuItems: {
                 1: {
-                    'name': 'Margherita',
-                    'description': 'A delicious tomato based pizza topped with mozzarella',
-                    'options': [{
-                        'size': 9,
-                        'price': 6.95
+                    name: 'Margherita',
+                    description: 'A delicious tomato based pizza topped with mozzarella',
+                    options: [{
+                        size: 9,
+                        price: 6.95
                     }, {
-                        'size': 12,
-                        'price': 10.95
+                        size: 12,
+                        price: 10.95
                     }]
                 },
                 2: {
-                    'name': 'Pepperoni',
-                    'description': 'A delicious tomato based pizza topped with mozzarella and pepperoni',
-                    'options': [{
-                        'size': 9,
-                        'price': 7.95
+                    name: 'Pepperoni',
+                    description: 'A delicious tomato based pizza topped with mozzarella and pepperoni',
+                    options: [{
+                        size: 9,
+                        price: 7.95
                     }, {
-                        'size': 12,
-                        'price': 12.95
+                        size: 12,
+                        price: 12.95
                     }]
                 },
                 3: {
-                    'name': 'Ham and Pineapple',
-                    'description': 'A delicious tomato based pizza topped with mozzarella, ham and pineapple',
-                    'options': [{
-                        'size': 9,
-                        'price': 7.95
+                    name: 'Ham and Pineapple',
+                    description: 'A delicious tomato based pizza topped with mozzarella, ham and pineapple',
+                    options: [{
+                        size: 9,
+                        price: 7.95
                     }, {
-                        'size': 12,
-                        'price': 12.95
+                        size: 12,
+                        price: 12.95
                     }]
                 }
 
@@ -58,9 +59,10 @@ export default {
     },
     methods: {
         async addToBasket(item: Item, options: Options) {
+            let thisItem: Item = item;
 
             const pizzaExists = await (this.basket as unknown as any[]).find(
-                pizza => pizza.name === item.name && pizza.size === options.size
+                pizza => pizza.name === thisItem.name && pizza.size === options.size
             )
 
             if (pizzaExists) {
@@ -70,22 +72,22 @@ export default {
 
 
             (this.basket as unknown as any[]).push({
-                name: item.name,
+                name: thisItem.name,
                 price: options.price,
                 size: options.size,
                 quantity: 1
             })
         },
-        removeFromBasket(item) {
+        removeFromBasket(item: never) {
             this.basket.splice(this.basket.indexOf(item), 1);
         },
-        increaseQuantity(item) {
+        increaseQuantity(item: Item) {
             item.quantity++;
         },
-        decreaseQuantity(item) {
+        decreaseQuantity(item: Item) {
             item.quantity--;
             if (item.quantity === 0) {
-                this.removeFromBasket(item);
+                this.removeFromBasket(item as never);
             }
         },
     },
@@ -113,7 +115,8 @@ export default {
                     <tr v-for="(option, index) in item.options">
                         <td :key="index">{{ option.size }}"</td>
                         <td :key="index">${{ option.price }}</td>
-                        <td><button type="button" class="btn_green" @click="addToBasket(item, option)">+</button></td>
+                        <td><button type="button" class="btn_green"
+                                @click="addToBasket(item as never, option)">+</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -124,7 +127,7 @@ export default {
             <div v-if="basket.length > 0">
 
                 <table>
-                    <tbody v-for="(item, index) in basket" :key="index">
+                    <tbody v-for="(item, index) in basket as any" :key="index">
                         <tr>
                             <td>
                                 <button class="btn_green" @click="decreaseQuantity(item)">&#8722;</button>

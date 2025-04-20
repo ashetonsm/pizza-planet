@@ -1,4 +1,7 @@
 <script lang="ts">
+import { addDoc } from 'firebase/firestore'
+import { dbMenuRef } from '../firebase.ts'
+
 export default {
     name: 'addNewPizza',
     data() {
@@ -18,7 +21,7 @@ export default {
     },
     methods: {
         add() {
-            alert('method triggered.');
+            addDoc(dbMenuRef, this.newPizza)
         }
     }
 }
