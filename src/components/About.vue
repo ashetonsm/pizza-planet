@@ -5,8 +5,22 @@ export default {
 </script>
 <template>
     <div>
-        <h2>Welcome to Pizza Planet!</h2>
-        <h3>Address:</h3>
-        <p></p>
+        <h3>Info Links:</h3>
+        <nav>
+            <ul>
+                <RouterLink to="/history">History</RouterLink>
+                <RouterLink to="/delivery">Delivery</RouterLink>
+                <RouterLink to="/orderGuide">Order Guide</RouterLink>
+            </ul>
+        </nav>
+        <RouterView></RouterView>
     </div>
 </template>
+
+<style scoped>
+h3,
+p,
+.info_block {
+    text-align: center;
+}
+</style>

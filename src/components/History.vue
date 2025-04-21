@@ -5,7 +5,6 @@ export default {
 </script>
 <template>
     <div class="info_block">
-        <h2>Welcome to Pizza Planet!</h2>
         <h3>History Info:</h3>
         <div class="info_black_content">
             <p>
