@@ -2,7 +2,6 @@
 export default {
     name: "appHeader"
 };
-import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
@@ -11,10 +10,10 @@ import { RouterLink, RouterView } from 'vue-router'
             <img src="../assets/images/planet.png" alt="Pizza Planet Icon">
             <h1 href="/">Pizza Planet</h1>
             <nav>
-                <RouterLink to="/">Home</RouterLink>
-                <RouterLink to="/menu">Menu</RouterLink>
-                <RouterLink to="/contact">Contact</RouterLink>
-                <RouterLink to="/about">About</RouterLink>
+                <RouterLink :to="{ name: 'home' }">Home</RouterLink>
+                <RouterLink :to="{ name: 'menu' }">Menu</RouterLink>
+                <RouterLink :to="{ name: 'contact' }">Contact</RouterLink>
+                <RouterLink :to="{ name: 'about' }">About</RouterLink>
             </nav>
         </div>
     </header>
