@@ -1,6 +1,11 @@
 <script lang="ts">
 export default {
-    name: "appHome"
+    name: "Home",
+    methods: {
+        goToMenu() {
+            this.$router.push({ name: 'menu' });
+        }
+    }
 }
 </script>
 <template>
@@ -9,7 +14,7 @@ export default {
             <h2>Welcome to Pizza Planet!</h2>
             <img src="../assets/images/roller.png" alt="Roller image">
             <h3>Feeling Hungry?</h3>
-            <button class="order_btn">Let's Order!</button>
+            <button class="order_btn" @click="goToMenu">Let's Order!</button>
         </div>
     </div>
 </template>
