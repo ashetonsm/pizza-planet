@@ -42,13 +42,21 @@ const router = createRouter({
       path: '/admin',
       name: 'admin',
       component: AdminView,
+      beforeEnter: (to, from, next) => {
+        alert('This area is for authorized users only. Please sign in to continue.')
+        next()
+      }
     },
     {
       path: '/contact',
       name: 'contact',
       component: ContactView,
     },
-  ],
+  ], scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    }
+  }
 })
 
 export default router
