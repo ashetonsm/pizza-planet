@@ -8,9 +8,9 @@ export default {
         <h3>Info Links:</h3>
         <nav>
             <ul>
-                <RouterLink to="/history">History</RouterLink>
-                <RouterLink to="/delivery">Delivery</RouterLink>
-                <RouterLink to="/orderGuide">Order Guide</RouterLink>
+                <RouterLink :to="{ name: 'history' }">History</RouterLink>
+                <RouterLink :to="{ name: 'delivery' }">Delivery</RouterLink>
+                <RouterLink :to="{ name: 'orderGuide' }">Order Guide</RouterLink>
             </ul>
         </nav>
         <RouterView></RouterView>
