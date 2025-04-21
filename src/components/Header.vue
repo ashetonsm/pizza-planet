@@ -2,7 +2,6 @@
 export default {
     name: "appHeader"
 };
-import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
