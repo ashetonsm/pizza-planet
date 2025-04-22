@@ -17,17 +17,14 @@ export default {
         },
         numberOfOrders() {
             return useMenuStore().numberOfOrders
+        },
+        currentUser() {
+            return useMenuStore().getCurrentUser
         }
     },
     methods: {
-        async signOut() {
-            signOut(firebaseAuth).then(() => {
-                // Sign-out successful.
-                alert('You have been signed out. Goodbye!');
-            }).catch((error) => {
-                // An error occurred.
-                alert(`Sign out error: ${error}`);
-            })
+        signOut() {
+            useMenuStore().signOut()
         }
     }
 }
@@ -35,7 +32,7 @@ export default {
 <template>
     <div class="admin_wrapper">
         <div class="current_user_wrapper">
-            <span>Logged in as:</span>
+            <span>Logged in as: {{ currentUser }}</span>
             <button type="button" class="btn_red" @click="signOut()">Sign Out</button>
         </div>
         <NewPizza></NewPizza>

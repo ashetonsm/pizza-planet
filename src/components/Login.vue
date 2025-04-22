@@ -1,7 +1,5 @@
 <script lang="ts">
-
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { firebaseAuth } from '../firebase';
+import { useMenuStore } from '@/stores/store';
 
 
 
@@ -14,19 +12,13 @@ export default {
         }
     },
     methods: {
-        async signIn() {
-            signInWithEmailAndPassword(firebaseAuth, this.email, this.password)
-                .then((userCredential) => {
-                    //Signed in
-                    const user = userCredential.user;
-                    alert('Welcome, ' + user.email);
+        signIn() {
+            const user = {
+                username: this.email,
+                password: this.password
+            }
 
-                })
-                .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    alert('Error Code: ' + errorCode + '--- Error Message: ' + errorMessage);
-                })
+            useMenuStore().signIn(user.username, user.password);
         }
     }
 }
