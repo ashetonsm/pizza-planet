@@ -3,6 +3,7 @@ import NewPizza from './NewPizza.vue';
 import Login from './Login.vue';
 import { firebaseAuth } from '@/firebase';
 import { signOut } from 'firebase/auth';
+import { useMenuStore } from '@/stores/store';
 
 export default {
     name: "Admin",
@@ -10,15 +11,14 @@ export default {
         NewPizza,
         Login
     },
+    setup() {
+        const menuStore = useMenuStore()
+        return { menuStore }
+    },
+    computed: {},
     methods: {
-        async signOut() {
-            signOut(firebaseAuth).then(() => {
-                // Sign-out successful.
-                alert('You have been signed out. Goodbye!');
-            }).catch((error) => {
-                // An error occurred.
-                alert(`Sign out error: ${error}`);
-            })
+        signOut() {
+            useMenuStore().signOut()
         }
     }
 }
@@ -26,7 +26,7 @@ export default {
 <template>
     <div class="admin_wrapper">
         <div class="current_user_wrapper">
-            <span>Logged in as:</span>
+            <span>Logged in as: {{ menuStore.currentUser?.email }}</span>
             <button type="button" class="btn_red" @click="signOut()">Sign Out</button>
         </div>
         <NewPizza></NewPizza>
@@ -42,9 +42,9 @@ export default {
                         </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-for="item in menuStore.getMenuItems" :key="item.name">
                     <tr>
-                        <td>Margherita</td>
+                        <td>{{ item.name }}</td>
                         <td>
                             <button type="button" class="btn_red">&times;</button>
                         </td>
@@ -53,7 +53,7 @@ export default {
             </table>
         </div>
         <div class="orders_wrapper">
-            <h3>Current Orders: (5)</h3>
+            <h3>Current Orders: ({{ menuStore.getNumberOfOrders }})</h3>
             <table>
                 <thead>
                     <tr>
@@ -74,7 +74,7 @@ export default {
                 <tbody>
                     <tr class="order_number">
                         <th colspan="4">
-                            <strong>Order Number: 4</strong>
+                            <strong>Order Number: {{ menuStore.getNumberOfOrders }}</strong>
                             <button type="button" class="btn_red">&times;</button>
                         </th>
                     </tr>

@@ -13,51 +13,25 @@ type Options = {
     size: number;
     price: number;
 }
+import { useMenuStore } from '@/stores/store.ts'
 
 export default {
-    data(vm) {
+    data() {
         return {
             basket: [],
-            basketText: 'Your basket is empty.',
-            getMenuItems: {
-                1: {
-                    name: 'Margherita',
-                    description: 'A delicious tomato based pizza topped with mozzarella',
-                    options: [{
-                        size: 9,
-                        price: 6.95
-                    }, {
-                        size: 12,
-                        price: 10.95
-                    }]
-                },
-                2: {
-                    name: 'Pepperoni',
-                    description: 'A delicious tomato based pizza topped with mozzarella and pepperoni',
-                    options: [{
-                        size: 9,
-                        price: 7.95
-                    }, {
-                        size: 12,
-                        price: 12.95
-                    }]
-                },
-                3: {
-                    name: 'Ham and Pineapple',
-                    description: 'A delicious tomato based pizza topped with mozzarella, ham and pineapple',
-                    options: [{
-                        size: 9,
-                        price: 7.95
-                    }, {
-                        size: 12,
-                        price: 12.95
-                    }]
-                }
-
-            }
+            basketText: 'Your basket is empty.'
         }
     },
+    setup() {
+        const menuStore = useMenuStore()
+        return { menuStore }
+    },
     methods: {
+        addNewOrder() {
+            this.menuStore.addOrder(this.basket as unknown as Item)
+            this.basket = [];
+            this.basketText = 'Thank you, your order has been placed!'
+        },
         async addToBasket(item: Item, options: Options) {
             let thisItem: Item = item;
 
@@ -88,8 +62,11 @@ export default {
             item.quantity--;
             if (item.quantity === 0) {
                 this.removeFromBasket(item as never);
+                this.basketText = 'Your basket is empty.';
             }
         },
+    },
+    computed: {
     },
     name: "Menu"
 }
@@ -101,7 +78,7 @@ export default {
             <h1>Menu</h1>
 
             <h3>Pizza</h3>
-            <table v-for="item in getMenuItems" :key="item.name">
+            <table v-for="item in menuStore.getMenuItems as any" :key="item.name">
                 <tbody>
                     <tr>
                         <td><strong>~{{ item.name }}~</strong></td>
@@ -140,10 +117,10 @@ export default {
                     </tbody>
                 </table>
                 <p>Order Total:</p>
-                <button class="btn_green">Place Order</button>
+                <button class="btn_green" @click="addNewOrder">Place Order</button>
             </div>
             <div v-else>
-                <h3>{{ basketText }}</h3>
+                <h3>{{ basketText }}</h3> {{ menuStore.orders.length }}
             </div>
         </div>
     </div>
