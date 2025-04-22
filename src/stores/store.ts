@@ -48,12 +48,17 @@ export const useMenuStore = defineStore('menuItems', {
     },
     getters: {
         getMenuItems: state => state.menuItems,
-        numberOfOrders: state => state.orders.length
+        numberOfOrders: state => state.orders
+    },
+    actions: {
+        addOrder(basket: Item) {
+            this.orders.push(basket)
+        }
     }
 })
 interface State {
     menuItems: Item[],
-    orders: [],
+    orders: Item[],
 }
 
 interface Item {

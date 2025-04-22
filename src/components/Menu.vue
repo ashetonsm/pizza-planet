@@ -23,6 +23,11 @@ export default {
         }
     },
     methods: {
+        addNewOrder() {
+            useMenuStore().addOrder(this.basket as unknown as Item)
+            this.basket = [];
+            this.basketText = 'Thank you, your order has been placed!'
+        },
         async addToBasket(item: Item, options: Options) {
             let thisItem: Item = item;
 
@@ -59,6 +64,9 @@ export default {
     computed: {
         getMenuItems() {
             return useMenuStore().getMenuItems
+        },
+        getOrdersNumber() {
+            return useMenuStore().numberOfOrders
         }
     },
     name: "Menu"
@@ -110,10 +118,10 @@ export default {
                     </tbody>
                 </table>
                 <p>Order Total:</p>
-                <button class="btn_green">Place Order</button>
+                <button class="btn_green" @click="addNewOrder">Place Order</button>
             </div>
             <div v-else>
-                <h3>{{ basketText }}</h3>
+                <h3>{{ basketText }}</h3> {{ getOrdersNumber }}
             </div>
         </div>
     </div>
