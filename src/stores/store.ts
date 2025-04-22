@@ -50,7 +50,7 @@ export const useMenuStore = defineStore('menuItems', {
     },
     getters: {
         getMenuItems: state => state.menuItems,
-        numberOfOrders: state => state.orders,
+        getNumberOfOrders: state => state.orders.length,
         getCurrentUser: state => state.currentUser?.email
     },
     actions: {
