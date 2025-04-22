@@ -62,6 +62,7 @@ export default {
             item.quantity--;
             if (item.quantity === 0) {
                 this.removeFromBasket(item as never);
+                this.basketText = 'Your basket is empty.';
             }
         },
     },
