@@ -13,48 +13,13 @@ type Options = {
     size: number;
     price: number;
 }
+import { useMenuStore } from '@/stores/store.ts'
 
 export default {
     data(vm) {
         return {
             basket: [],
-            basketText: 'Your basket is empty.',
-            getMenuItems: {
-                1: {
-                    name: 'Margherita',
-                    description: 'A delicious tomato based pizza topped with mozzarella',
-                    options: [{
-                        size: 9,
-                        price: 6.95
-                    }, {
-                        size: 12,
-                        price: 10.95
-                    }]
-                },
-                2: {
-                    name: 'Pepperoni',
-                    description: 'A delicious tomato based pizza topped with mozzarella and pepperoni',
-                    options: [{
-                        size: 9,
-                        price: 7.95
-                    }, {
-                        size: 12,
-                        price: 12.95
-                    }]
-                },
-                3: {
-                    name: 'Ham and Pineapple',
-                    description: 'A delicious tomato based pizza topped with mozzarella, ham and pineapple',
-                    options: [{
-                        size: 9,
-                        price: 7.95
-                    }, {
-                        size: 12,
-                        price: 12.95
-                    }]
-                }
-
-            }
+            basketText: 'Your basket is empty.'
         }
     },
     methods: {
@@ -91,6 +56,11 @@ export default {
             }
         },
     },
+    computed: {
+        getMenuItems() {
+            return useMenuStore().menuItems
+        }
+    },
     name: "Menu"
 }
 </script>
@@ -101,7 +71,7 @@ export default {
             <h1>Menu</h1>
 
             <h3>Pizza</h3>
-            <table v-for="item in getMenuItems" :key="item.name">
+            <table v-for="item in getMenuItems as any" :key="item.name">
                 <tbody>
                     <tr>
                         <td><strong>~{{ item.name }}~</strong></td>
