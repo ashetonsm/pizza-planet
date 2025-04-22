@@ -43,11 +43,17 @@ export const useMenuStore = defineStore('menuItems', {
                 }
 
                 ],
+            orders: [],
         }
     },
+    getters: {
+        getMenuItems: state => state.menuItems,
+        numberOfOrders: state => state.orders.length
+    }
 })
 interface State {
-    menuItems: Item[]
+    menuItems: Item[],
+    orders: [],
 }
 
 interface Item {
@@ -58,9 +64,4 @@ interface Item {
         size: number;
         price: number;
     }[]
-}
-
-interface Options {
-    size: number;
-    price: number;
 }

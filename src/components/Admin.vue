@@ -3,12 +3,21 @@ import NewPizza from './NewPizza.vue';
 import Login from './Login.vue';
 import { firebaseAuth } from '@/firebase';
 import { signOut } from 'firebase/auth';
+import { useMenuStore } from '@/stores/store';
 
 export default {
     name: "Admin",
     components: {
         NewPizza,
         Login
+    },
+    computed: {
+        getMenuItems() {
+            return useMenuStore().getMenuItems
+        },
+        numberOfOrders() {
+            return useMenuStore().numberOfOrders
+        }
     },
     methods: {
         async signOut() {
@@ -42,9 +51,9 @@ export default {
                         </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-for="item in getMenuItems" :key="item.name">
                     <tr>
-                        <td>Margherita</td>
+                        <td>{{ item.name }}</td>
                         <td>
                             <button type="button" class="btn_red">&times;</button>
                         </td>
@@ -53,7 +62,7 @@ export default {
             </table>
         </div>
         <div class="orders_wrapper">
-            <h3>Current Orders: (5)</h3>
+            <h3>Current Orders: ({{ numberOfOrders }})</h3>
             <table>
                 <thead>
                     <tr>
@@ -74,7 +83,7 @@ export default {
                 <tbody>
                     <tr class="order_number">
                         <th colspan="4">
-                            <strong>Order Number: 4</strong>
+                            <strong>Order Number: {{ numberOfOrders }}</strong>
                             <button type="button" class="btn_red">&times;</button>
                         </th>
                     </tr>

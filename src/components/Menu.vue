@@ -58,7 +58,7 @@ export default {
     },
     computed: {
         getMenuItems() {
-            return useMenuStore().menuItems
+            return useMenuStore().getMenuItems
         }
     },
     name: "Menu"
