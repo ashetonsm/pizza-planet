@@ -16,15 +16,19 @@ type Options = {
 import { useMenuStore } from '@/stores/store.ts'
 
 export default {
-    data(vm) {
+    data() {
         return {
             basket: [],
             basketText: 'Your basket is empty.'
         }
     },
+    setup() {
+        const menuStore = useMenuStore()
+        return { menuStore }
+    },
     methods: {
         addNewOrder() {
-            useMenuStore().addOrder(this.basket as unknown as Item)
+            this.menuStore.addOrder(this.basket as unknown as Item)
             this.basket = [];
             this.basketText = 'Thank you, your order has been placed!'
         },
@@ -62,12 +66,6 @@ export default {
         },
     },
     computed: {
-        getMenuItems() {
-            return useMenuStore().getMenuItems
-        },
-        getOrdersNumber() {
-            return useMenuStore().numberOfOrders
-        }
     },
     name: "Menu"
 }
@@ -79,7 +77,7 @@ export default {
             <h1>Menu</h1>
 
             <h3>Pizza</h3>
-            <table v-for="item in getMenuItems as any" :key="item.name">
+            <table v-for="item in menuStore.getMenuItems as any" :key="item.name">
                 <tbody>
                     <tr>
                         <td><strong>~{{ item.name }}~</strong></td>
@@ -121,7 +119,7 @@ export default {
                 <button class="btn_green" @click="addNewOrder">Place Order</button>
             </div>
             <div v-else>
-                <h3>{{ basketText }}</h3> {{ getOrdersNumber }}
+                <h3>{{ basketText }}</h3> {{ menuStore.orders.length }}
             </div>
         </div>
     </div>

@@ -11,17 +11,11 @@ export default {
         NewPizza,
         Login
     },
-    computed: {
-        getMenuItems() {
-            return useMenuStore().getMenuItems
-        },
-        numberOfOrders() {
-            return useMenuStore().numberOfOrders
-        },
-        currentUser() {
-            return useMenuStore().getCurrentUser
-        }
+    setup() {
+        const menuStore = useMenuStore()
+        return { menuStore }
     },
+    computed: {},
     methods: {
         signOut() {
             useMenuStore().signOut()
@@ -32,7 +26,7 @@ export default {
 <template>
     <div class="admin_wrapper">
         <div class="current_user_wrapper">
-            <span>Logged in as: {{ currentUser }}</span>
+            <span>Logged in as: {{ menuStore.currentUser?.email }}</span>
             <button type="button" class="btn_red" @click="signOut()">Sign Out</button>
         </div>
         <NewPizza></NewPizza>
@@ -48,7 +42,7 @@ export default {
                         </th>
                     </tr>
                 </thead>
-                <tbody v-for="item in getMenuItems" :key="item.name">
+                <tbody v-for="item in menuStore.getMenuItems" :key="item.name">
                     <tr>
                         <td>{{ item.name }}</td>
                         <td>
@@ -59,7 +53,7 @@ export default {
             </table>
         </div>
         <div class="orders_wrapper">
-            <h3>Current Orders: ({{ numberOfOrders }})</h3>
+            <h3>Current Orders: ({{ menuStore.getNumberOfOrders }})</h3>
             <table>
                 <thead>
                     <tr>
@@ -80,7 +74,7 @@ export default {
                 <tbody>
                     <tr class="order_number">
                         <th colspan="4">
-                            <strong>Order Number: {{ numberOfOrders }}</strong>
+                            <strong>Order Number: {{ menuStore.getNumberOfOrders }}</strong>
                             <button type="button" class="btn_red">&times;</button>
                         </th>
                     </tr>
