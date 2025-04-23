@@ -1,13 +1,13 @@
-import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { signInWithEmailAndPassword, signOut, type User } from 'firebase/auth';
-import { firebaseAuth } from '../firebase';
-import { menuItems } from './modules/menu.ts';
+import { db, firebaseAuth } from '../firebase';
+import { dbMenuRef } from '../firebase';
+import { collection, CollectionReference, doc, getDoc, getDocs, type DocumentData } from 'firebase/firestore';
 
 export const useMenuStore = defineStore('menuItems', {
     state: (): State => {
         return {
-            menuItems,
+            menuItems: [],
             orders: [],
             currentUser: null
         }
@@ -18,6 +18,16 @@ export const useMenuStore = defineStore('menuItems', {
         getCurrentUser: state => state.currentUser?.email
     },
     actions: {
+        async setMenuRef() {
+            const querySnapshot = await getDocs(collection(db, "menu"));
+            querySnapshot.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                console.log(doc.id, " => ", doc.data());
+                this.menuItems.push(doc.data()[0])
+            });
+            console.log('Menu Items:')
+            console.log(this.menuItems)
+        },
         addOrder(basket: Item) {
             this.orders.push(basket)
         },
@@ -65,4 +75,8 @@ interface Item {
         size: number;
         price: number;
     }[]
+}
+
+function useFirestore(arg0: CollectionReference<DocumentData, DocumentData>) {
+    throw new Error('Function not implemented.');
 }
