@@ -14,6 +14,7 @@ export default {
                 <RouterLink :to="{ name: 'menu' }">Menu</RouterLink>
                 <RouterLink :to="{ name: 'contact' }">Contact</RouterLink>
                 <RouterLink :to="{ name: 'about' }">About</RouterLink>
+                <RouterLink :to="{ name: 'admin' }">ADMIN</RouterLink>
             </nav>
         </div>
     </header>
