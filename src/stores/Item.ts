@@ -5,6 +5,12 @@ export interface Item {
     options: Options[]
 }
 
+export interface Order {
+    date: Date;
+    id: string;
+    items: Item[];
+}
+
 export type Options = {
     size: number;
     price: number;
