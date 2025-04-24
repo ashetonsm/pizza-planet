@@ -1,9 +1,8 @@
 <script lang="ts">
 import NewPizza from './NewPizza.vue';
 import Login from './Login.vue';
-import { firebaseAuth } from '@/firebase';
-import { signOut } from 'firebase/auth';
 import { useMenuStore } from '@/stores/store';
+import type { Item } from '@/stores/Item';
 
 export default {
     name: "Admin",
@@ -15,10 +14,12 @@ export default {
         const menuStore = useMenuStore()
         return { menuStore }
     },
-    computed: {},
     methods: {
         signOut() {
             useMenuStore().signOut()
+        },
+        removeItem(item: Item) {
+            useMenuStore().removeItem(item)
         }
     }
 }
@@ -42,11 +43,11 @@ export default {
                         </th>
                     </tr>
                 </thead>
-                <tbody v-for="item in menuStore.getMenuItems" :key="item.name">
+                <tbody v-for="item in menuStore.getMenuItems as any" :key="item.name">
                     <tr>
                         <td>{{ item.name }}</td>
                         <td>
-                            <button type="button" class="btn_red">&times;</button>
+                            <button type="button" class="btn_red" @click="removeItem(item)">&times;</button>
                         </td>
                     </tr>
                 </tbody>
@@ -55,34 +56,12 @@ export default {
         <div class="orders_wrapper">
             <h3>Current Orders: ({{ menuStore.getNumberOfOrders }})</h3>
             <table>
-                <thead>
-                    <tr>
-                        <th>
-                            Item
-                        </th>
-                        <th>
-                            Size
-                        </th>
-                        <th>
-                            Quantity
-                        </th>
-                        <th>
-                            Price
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
+                <tbody v-for="(item, index) in menuStore.orders" :key="index">
                     <tr class="order_number">
                         <th colspan="4">
-                            <strong>Order Number: {{ menuStore.getNumberOfOrders }}</strong>
+                            <strong>Order Id: {{ item.id }}</strong>
                             <button type="button" class="btn_red">&times;</button>
                         </th>
-                    </tr>
-                    <tr>
-                        <td>Margherita</td>
-                        <td>9"</td>
-                        <td>2</td>
-                        <td>$13</td>
                     </tr>
                 </tbody>
             </table>
