@@ -12,6 +12,7 @@ export default {
   created() {
     console.log('HELLO')
     useMenuStore().setMenuRef()
+    useMenuStore().setOrdersRef()
   }
 }
 </script>
