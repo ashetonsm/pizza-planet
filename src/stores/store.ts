@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { signInWithEmailAndPassword, signOut, type User } from 'firebase/auth';
 import { db, firebaseAuth } from '../firebase';
 import { addDoc, collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
-import { Item, menuItemConverter, type Order } from './Item';
+import { Item, menuItemConverter, orderConverter, type Order } from './Item';
 
 export const useMenuStore = defineStore('menuItems', {
     state: (): State => {
@@ -65,7 +65,7 @@ export const useMenuStore = defineStore('menuItems', {
             }
 
             // adds an order
-            const docRef = (await addDoc(collection(db, "orders"), { basket }))
+            const docRef = ((await addDoc(collection(db, "orders"), { basket })).withConverter(orderConverter))
             console.log(docRef)
 
         },
