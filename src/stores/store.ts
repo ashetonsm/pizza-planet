@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import { signInWithEmailAndPassword, signOut, type User } from 'firebase/auth';
 import { db, firebaseAuth } from '../firebase';
-import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
-import { Item, menuItemConverter } from './Item';
+import { addDoc, collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
+import { Item, menuItemConverter, type Order } from './Item';
 
 export const useMenuStore = defineStore('menuItems', {
     state: (): State => {
@@ -20,8 +20,6 @@ export const useMenuStore = defineStore('menuItems', {
     },
     actions: {
         async setMenuRef() {
-            const ref = query(collection(db, "cities"));
-
             const querySnapshot = await getDocs(collection(db, "menu").withConverter(menuItemConverter));
 
             querySnapshot.forEach(async (doc) => {
@@ -41,19 +39,58 @@ export const useMenuStore = defineStore('menuItems', {
             console.log('Menu Items:')
             console.log(this.menuItems)
         },
-        addOrder(basket: Item) {
-            this.orders.push(basket)
+        async setOrdersRef() {
+            const querySnapshot = await getDocs(collection(db, "orders"));
+
+            // Clear the local orders list
+            this.orders = [];
+            querySnapshot.forEach(async (doc) => {
+                // Orders is an array of Basket[]
+                // Each Basket contains an array of Items[] from the menu
+                // Each Item from the menu is an {Item} object
+
+                const oneOrder = {
+                    id: doc.id,
+                    items: [],
+                    date: new Date,
+                } as Order;
+
+                let oneBasket = [];
+                // This is each individual menu item in the menuItems list...
+                doc.data().basket.forEach((b: Item) => {
+                    oneOrder.items.push(b)
+                })
+
+                this.orders.push(oneOrder)
+
+            });
+            console.log('Orders:')
+            console.log(this.orders)
+        },
+        async addOrder(basket: Item) {
+            // Set with menuItemConverter
+            console.log(basket)
+            // adds an order
+            const docRef = (await addDoc(collection(db, "orders"), { basket }))
+                .withConverter(menuItemConverter)
+            console.log(docRef)
+
         },
         async addNewPizza(pizza: Item) {
             // Set with menuItemConverter
             console.log(pizza)
             const ref = doc(db, "menu", pizza.name).withConverter(menuItemConverter);
             console.log(ref)
+            // Adds or updates a doc with the same ref. setDoc() requires an id (pizza.name above)
             await setDoc(ref, new Item(pizza.name, pizza.description, pizza.quantity, pizza.options))
                 .then(() => {
                     this.setMenuRef()
-                }
-                )
+                })
+        },
+        async removeItem(item: Item) {
+            // Set with menuItemConverter
+            console.log('Removing from menu:')
+            console.log(item)
         },
         userStatus(user: User | null) {
             user === null ? this.currentUser = null : this.currentUser = user
@@ -87,6 +124,6 @@ export const useMenuStore = defineStore('menuItems', {
 })
 interface State {
     menuItems: Item[],
-    orders: Item[],
+    orders: Order[],
     currentUser: User | null
 }
