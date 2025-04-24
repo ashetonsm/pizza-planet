@@ -49,30 +49,23 @@ export const useMenuStore = defineStore('menuItems', {
                 // Each Basket contains an array of Items[] from the menu
                 // Each Item from the menu is an {Item} object
 
-                const oneOrder = {
-                    id: doc.id,
-                    items: [],
-                    date: new Date,
-                } as Order;
+                this.orders.push(doc.data().basket)
 
-                let oneBasket = [];
-                // This is each individual menu item in the menuItems list...
-                doc.data().basket.forEach((b: Item) => {
-                    oneOrder.items.push(b)
-                })
-
-                this.orders.push(oneOrder)
 
             });
             console.log('Orders:')
             console.log(this.orders)
         },
-        async addOrder(basket: Item) {
+        async addOrder(submitted: Item) {
             // Set with menuItemConverter
-            console.log(basket)
+            console.log(submitted)
+            const basket = {
+                items: submitted,
+                date: new Date,
+            }
+
             // adds an order
             const docRef = (await addDoc(collection(db, "orders"), { basket }))
-                .withConverter(menuItemConverter)
             console.log(docRef)
 
         },
