@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import { signInWithEmailAndPassword, signOut, type User } from 'firebase/auth';
 import { db, firebaseAuth } from '../firebase';
-import { dbMenuRef } from '../firebase';
-import { collection, CollectionReference, doc, getDoc, getDocs, type DocumentData } from 'firebase/firestore';
+import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
+import { Item, menuItemConverter } from './Item';
 
 export const useMenuStore = defineStore('menuItems', {
     state: (): State => {
@@ -12,6 +12,7 @@ export const useMenuStore = defineStore('menuItems', {
             currentUser: null
         }
     },
+
     getters: {
         getMenuItems: state => state.menuItems,
         getNumberOfOrders: state => state.orders.length,
@@ -19,17 +20,40 @@ export const useMenuStore = defineStore('menuItems', {
     },
     actions: {
         async setMenuRef() {
-            const querySnapshot = await getDocs(collection(db, "menu"));
-            querySnapshot.forEach((doc) => {
+            const ref = query(collection(db, "cities"));
+
+            const querySnapshot = await getDocs(collection(db, "menu").withConverter(menuItemConverter));
+
+            querySnapshot.forEach(async (doc) => {
                 // doc.data() is never undefined for query doc snapshots
-                console.log(doc.id, " => ", doc.data());
-                this.menuItems.push(doc.data()[0])
+                console.log(doc.data());
+                const pizzaExists = await (this.menuItems).find(
+                    pizza => pizza.name === doc.data().name
+                )
+
+                if (pizzaExists) {
+                    return
+                } else {
+                    this.menuItems.push(doc.data())
+                }
+
             });
             console.log('Menu Items:')
             console.log(this.menuItems)
         },
         addOrder(basket: Item) {
             this.orders.push(basket)
+        },
+        async addNewPizza(pizza: Item) {
+            // Set with menuItemConverter
+            console.log(pizza)
+            const ref = doc(db, "menu", pizza.name).withConverter(menuItemConverter);
+            console.log(ref)
+            await setDoc(ref, new Item(pizza.name, pizza.description, pizza.quantity, pizza.options))
+                .then(() => {
+                    this.setMenuRef()
+                }
+                )
         },
         userStatus(user: User | null) {
             user === null ? this.currentUser = null : this.currentUser = user
@@ -65,18 +89,4 @@ interface State {
     menuItems: Item[],
     orders: Item[],
     currentUser: User | null
-}
-
-interface Item {
-    name: string;
-    description: string;
-    quantity: number;
-    options: {
-        size: number;
-        price: number;
-    }[]
-}
-
-function useFirestore(arg0: CollectionReference<DocumentData, DocumentData>) {
-    throw new Error('Function not implemented.');
 }
