@@ -1,18 +1,9 @@
 <script lang="ts">
-
-type Item = {
-    name: string;
-    description: string;
-    quantity: number;
-    options: {
-        size: number;
-        price: number;
-    }[]
-}
 type Options = {
     size: number;
     price: number;
 }
+import type { Item } from '@/stores/Item';
 import { useMenuStore } from '@/stores/store.ts'
 
 export default {
@@ -78,7 +69,7 @@ export default {
             <h1>Menu</h1>
 
             <h3>Pizza</h3>
-            <table v-for="item in menuStore.getMenuItems as any" :key="item.name">
+            <table v-for="item in menuStore.menuItems as any" :key="item.name">
                 <tbody>
                     <tr>
                         <td><strong>~{{ item.name }}~</strong></td>
