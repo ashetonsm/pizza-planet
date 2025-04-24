@@ -56,12 +56,18 @@ export default {
         <div class="orders_wrapper">
             <h3>Current Orders: ({{ menuStore.getNumberOfOrders }})</h3>
             <table>
-                <tbody v-for="(item, index) in menuStore.orders" :key="index">
+                <tbody v-for="(order, index) in menuStore.orders" :key="index">
                     <tr class="order_number">
                         <th colspan="4">
-                            <strong>Order Id: {{ item.id }}</strong>
+                            <strong>Order Id: {{ index + 1 }}</strong>
                             <button type="button" class="btn_red">&times;</button>
                         </th>
+                    </tr>
+                    <tr v-for="orderItem in order.items as Item[]" :key="orderItem.name + index">
+                        <td>{{ orderItem.name }}</td>
+                        <td>${{ orderItem.price }}</td>
+                        <td>{{ orderItem.size }}"</td>
+                        <td>Qty: {{ orderItem.quantity }}</td>
                     </tr>
                 </tbody>
             </table>
