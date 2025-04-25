@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { signInWithEmailAndPassword, signOut, type User } from 'firebase/auth';
 import { db, firebaseAuth } from '../firebase';
-import { addDoc, collection, deleteDoc, doc, getDocs, query, setDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import { Item, menuItemConverter, orderConverter, type Order } from './Item';
 
 export const useMenuStore = defineStore('menuItems', {
@@ -94,6 +94,31 @@ export const useMenuStore = defineStore('menuItems', {
                 })
             alert(item.name + ' deleted from menu.')
             console.log(this.menuItems)
+
+        },
+        async removeOrder(ordered: Order) {
+            // Set with menuItemConverter
+            console.log('Removing from orders:')
+            console.log(ordered)
+
+            const q = query(collection(db, "orders"), where("basket.date", "==", ordered.date));
+            const querySnapshot = await getDocs(q);
+            let toBeDeletedId = '';
+            querySnapshot.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                console.log(doc.id, " => ", doc.data());
+                toBeDeletedId = doc.id;
+            });
+
+            await deleteDoc(doc(db, "orders", toBeDeletedId))
+                .then(() => {
+                    const filteredArray = this.orders.filter(function (ord) {
+                        return ord !== ordered
+                    })
+                    this.orders = filteredArray;
+                })
+            alert('Order deleted from menu.')
+            console.log(this.orders)
 
         },
         userStatus(user: User | null) {
