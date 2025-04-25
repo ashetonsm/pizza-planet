@@ -58,6 +58,14 @@ export default {
         },
     },
     computed: {
+        total() {
+            let totalCost = 0
+            let thisBasket: Item[] = this.basket
+            thisBasket.map(item => {
+                totalCost += item.quantity * item.price
+            })
+            return totalCost
+        }
     },
     name: "Menu"
 }
@@ -103,11 +111,11 @@ export default {
                                 <button class="btn_green" @click="increaseQuantity(item)">+</button>
                             </td>
                             <td>{{ item.name }} {{ item.size }}"</td>
-                            <td>$ {{ item.price * item.quantity }}</td>
+                            <td>${{ (item.price * item.quantity).toFixed(2) }}</td>
                         </tr>
                     </tbody>
                 </table>
-                <p>Order Total:</p>
+                <p>Order Total: ${{ total.toFixed(2) }}</p>
                 <button class="btn_green" @click="addNewOrder">Place Order</button>
             </div>
             <div v-else>
