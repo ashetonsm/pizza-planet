@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { signInWithEmailAndPassword, signOut, type User } from 'firebase/auth';
 import { db, firebaseAuth } from '../firebase';
-import { addDoc, collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs, query, setDoc } from 'firebase/firestore';
 import { Item, menuItemConverter, orderConverter, type Order } from './Item';
 
 export const useMenuStore = defineStore('menuItems', {
@@ -67,6 +67,7 @@ export const useMenuStore = defineStore('menuItems', {
             // adds an order
             const docRef = ((await addDoc(collection(db, "orders"), { basket })).withConverter(orderConverter))
             console.log(docRef)
+            this.setOrdersRef()
 
         },
         async addNewPizza(pizza: Item) {
@@ -84,6 +85,16 @@ export const useMenuStore = defineStore('menuItems', {
             // Set with menuItemConverter
             console.log('Removing from menu:')
             console.log(item)
+            await deleteDoc(doc(db, "menu", item.name))
+                .then(() => {
+                    const filteredArray = this.menuItems.filter(function (mi) {
+                        return mi !== item
+                    })
+                    this.menuItems = filteredArray;
+                })
+            alert(item.name + ' deleted from menu.')
+            console.log(this.menuItems)
+
         },
         userStatus(user: User | null) {
             user === null ? this.currentUser = null : this.currentUser = user
