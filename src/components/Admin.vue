@@ -2,7 +2,7 @@
 import NewPizza from './NewPizza.vue';
 import Login from './Login.vue';
 import { useMenuStore } from '@/stores/store';
-import type { Item } from '@/stores/Item';
+import type { Item, Order } from '@/stores/Item';
 
 export default {
     name: "Admin",
@@ -20,6 +20,9 @@ export default {
         },
         removeItem(item: Item) {
             useMenuStore().removeItem(item)
+        },
+        removeOrder(order: Order) {
+            useMenuStore().removeOrder(order)
         }
     }
 }
@@ -60,7 +63,7 @@ export default {
                     <tr class="order_number">
                         <th colspan="4">
                             <strong>Order Id: {{ index + 1 }}</strong>
-                            <button type="button" class="btn_red">&times;</button>
+                            <button type="button" class="btn_red" @click="removeOrder(order)">&times;</button>
                         </th>
                     </tr>
                     <tr v-for="orderItem in order.items as Item[]" :key="orderItem.name + index">
