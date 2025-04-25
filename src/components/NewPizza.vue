@@ -1,6 +1,6 @@
 <script lang="ts">
-import { addDoc } from 'firebase/firestore'
-import { dbMenuRef } from '../firebase.ts'
+import type { Item, Options } from '@/stores/Item';
+import { useMenuStore } from '@/stores/store.ts'
 
 export default {
     name: 'addNewPizza',
@@ -9,19 +9,20 @@ export default {
             newPizza: {
                 name: 'Eg. Margherita',
                 description: 'Eg. A delicious tomato based pizza topped with mozzarella',
+                quantity: 1,
                 options: [{
                     size: 9,
                     price: 6.95
-                }, {
+                } as Options, {
                     size: 12,
                     price: 10.95
-                }]
-            }
+                } as Options]
+            } as Item
         }
     },
     methods: {
         add() {
-            addDoc(dbMenuRef, this.newPizza)
+            useMenuStore().addNewPizza(this.newPizza)
         }
     }
 }
@@ -61,7 +62,7 @@ export default {
             <input type="text" id="price2" v-model="newPizza.options[1].price">
         </div>
         <button type="button" class="btn_green" @click="add">Add</button>
-        {{ this.newPizza }}
+        {{ newPizza }}
     </form>
 </template>
 

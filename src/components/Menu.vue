@@ -1,18 +1,9 @@
 <script lang="ts">
-
-type Item = {
-    name: string;
-    description: string;
-    quantity: number;
-    options: {
-        size: number;
-        price: number;
-    }[]
-}
 type Options = {
     size: number;
     price: number;
 }
+import type { Item } from '@/stores/Item';
 import { useMenuStore } from '@/stores/store.ts'
 
 export default {
@@ -67,6 +58,14 @@ export default {
         },
     },
     computed: {
+        total() {
+            let totalCost = 0
+            let thisBasket: Item[] = this.basket
+            thisBasket.map(item => {
+                totalCost += item.quantity * item.price
+            })
+            return totalCost
+        }
     },
     name: "Menu"
 }
@@ -78,7 +77,7 @@ export default {
             <h1>Menu</h1>
 
             <h3>Pizza</h3>
-            <table v-for="item in menuStore.getMenuItems as any" :key="item.name">
+            <table v-for="item in menuStore.menuItems as any" :key="item.name">
                 <tbody>
                     <tr>
                         <td><strong>~{{ item.name }}~</strong></td>
@@ -112,11 +111,11 @@ export default {
                                 <button class="btn_green" @click="increaseQuantity(item)">+</button>
                             </td>
                             <td>{{ item.name }} {{ item.size }}"</td>
-                            <td>$ {{ item.price * item.quantity }}</td>
+                            <td>${{ (item.price * item.quantity).toFixed(2) }}</td>
                         </tr>
                     </tbody>
                 </table>
-                <p>Order Total:</p>
+                <p>Order Total: ${{ total.toFixed(2) }}</p>
                 <button class="btn_green" @click="addNewOrder">Place Order</button>
             </div>
             <div v-else>

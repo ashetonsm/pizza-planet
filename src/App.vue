@@ -1,16 +1,22 @@
 <script setup lang="ts">
 import Header from './components/Header.vue';
-import { useCounterStore } from './stores/counter';
-const store = useCounterStore();
+import { useMenuStore } from './stores/store';
+</script>
+
+<script lang="ts">
+export default {
+  name: 'app',
+  components: {
+    appHeader: Header
+  },
+  created() {
+    console.log('HELLO')
+    useMenuStore().setMenuRef()
+    useMenuStore().setOrdersRef()
+  }
+}
 </script>
 
 <template>
-  <div>
-    <p>Count: {{ store.count }}</p>
-    <p>Double Count: {{ store.doubleCount }}</p>
-    <button @click="store.increment()">Increase Count</button>
-  </div>
   <Header></Header>
 </template>
-
-<style scoped></style>
