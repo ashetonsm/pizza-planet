@@ -28,6 +28,7 @@ export default {
 
 <template>
     <div class="login_wrapper">
+        <p>Please Sign In to Continue:</p>
         <form>
             <div>
                 <label for="email">Email Address:</label>
