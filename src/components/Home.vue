@@ -9,12 +9,9 @@ export default {
 }
 </script>
 <template>
-    <div class="background">
-        <div class="background-overlay">
-            <h2>Welcome to Pizza Planet!</h2>
-            <img src="../assets/images/roller.png" alt="Roller image">
-            <h3>Feeling Hungry?</h3>
-            <button class="order_btn" @click="goToMenu">Let's Order!</button>
-        </div>
+    <div class="welcome_message">
+        <h2>Welcome to Pizza Planet!</h2>
+        <h3>Feeling Hungry?</h3>
+        <button class="order_btn" @click="goToMenu">Let's Order!</button>
     </div>
 </template>

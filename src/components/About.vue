@@ -16,11 +16,3 @@ export default {
         <RouterView></RouterView>
     </div>
 </template>
-
-<style scoped>
-h3,
-p,
-.info_block {
-    text-align: center;
-}
-</style>
