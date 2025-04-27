@@ -6,8 +6,9 @@ export default {
 
 <template>
     <header>
-        <div class="header_logo">
-            <h1>Pizza Planet</h1>
+        <div class="header-background">
+            <img src="../assets/images/PPLogo.png" alt="Pizza Planet Logo">
+            <h1 class="site-title">Pizza Planet</h1>
             <nav>
                 <ul>
                     <li>
