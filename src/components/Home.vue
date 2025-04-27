@@ -9,9 +9,11 @@ export default {
 }
 </script>
 <template>
-    <div class="welcome_message">
-        <h2>Welcome to Pizza Planet!</h2>
-        <h3>Feeling Hungry?</h3>
-        <button class="order_btn" @click="goToMenu">Let's Order!</button>
+    <div class="flex-container">
+        <div class="welcome-message">
+            <h2>Welcome to Pizza Planet!</h2>
+            <p>Feeling Hungry?</p>
+            <button class="order-btn" @click="goToMenu">Let's Order!</button>
+        </div>
     </div>
 </template>
