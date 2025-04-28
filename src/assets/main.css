@@ -112,7 +112,8 @@ ul {
 }
 
 ul.about-ul {
-  padding-left: 40;
+  flex-direction: column;
+
 }
 
 li {
