@@ -82,32 +82,3 @@ export default {
         <Login v-if="menuStore.currentUser == null" />
     </div>
 </template>
-
-<style scoped>
-.admin_wrapper {
-    margin: 10px;
-}
-
-.current_user_wrapper,
-.order_wrapper,
-.menu_wrapper {
-    margin: 10px 0;
-    padding: 10px;
-    border: solid 1px #f79e38;
-
-}
-
-table {
-    text-align: left;
-    width: 70vw;
-}
-
-.order_number th {
-    background: #ddd;
-}
-
-.order_number button {
-    margin: 0 10px;
-
-}
-</style>

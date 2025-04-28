@@ -9,12 +9,11 @@ export default {
 }
 </script>
 <template>
-    <div class="background">
-        <div class="background-overlay">
+    <div class="flex-container">
+        <div class="welcome-message">
             <h2>Welcome to Pizza Planet!</h2>
-            <img src="../assets/images/roller.png" alt="Roller image">
-            <h3>Feeling Hungry?</h3>
-            <button class="order_btn" @click="goToMenu">Let's Order!</button>
+            <p>Feeling Hungry?</p>
+            <button class="order-btn" @click="goToMenu">Let's Order!</button>
         </div>
     </div>
 </template>

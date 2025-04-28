@@ -66,22 +66,4 @@ export default {
     </form>
 </template>
 
-<style>
-.form-group {
-    margin: 10px 0;
-}
-
-label {
-    display: block;
-    margin: 0 0 10px 0;
-}
-
-input,
-textarea {
-    width: 50%;
-    padding: auto;
-    box-sizing: border-box;
-    background: white;
-    border: solid 1px #f79388;
-}
-</style>
+<style></style>
