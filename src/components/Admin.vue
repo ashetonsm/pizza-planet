@@ -68,7 +68,7 @@ export default {
                                 <button type="button" class="btn_red" @click="removeOrder(order)">&times;</button>
                             </th>
                         </tr>
-                        <tr v-for="orderItem in order.items as Item[]" :key="orderItem.name + index">
+                        <tr v-for="orderItem in order.basket.items as Item[]" :key="orderItem.name + index">
                             <td>{{ orderItem.name }}</td>
                             <td>${{ orderItem.price }}</td>
                             <td>{{ orderItem.size }}"</td>
