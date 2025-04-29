@@ -1,64 +1,27 @@
 # pizza-planet
 
-This template should help get you started developing with Vue 3 in Vite.
+A TypeScript version of a full stack Firebase application. Based on a tutorial by [Chris Dixon](https://www.skillshare.com/en/classes/vue-js-build-a-full-stack-app-with-firebase-vuex-and-vue-router/1654744071).
 
-## Recommended IDE Setup
+## Features:
+* Create and delete menu items
+* Create and delete orders
+* Secure admin area
+* 404 page
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Technology
 
-## Type Support for `.vue` Imports in TS
+* Vue.js (Vite, Pinia)
+* TypeScript
+* Firebase
+* Prettier
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
-### Run End-to-End Tests with [Playwright](https://playwright.dev)
-
-```sh
-# Install browsers for the first run
-npx playwright install
-
-# When testing on CI, must build the project first
-npm run build
-
-# Runs the end-to-end tests
-npm run test:e2e
-# Runs the tests only on Chromium
-npm run test:e2e -- --project=chromium
-# Runs the tests of a specific file
-npm run test:e2e -- tests/example.spec.ts
-# Runs the tests in debug mode
-npm run test:e2e -- --debug
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+### To do:
+- [x] Basic Firebase create/read/write/delete
+- [ ] Finish styling
+- [ ] Add dark/light mode
+- [ ] Simulate order progress
+- [ ] Add customer user functionality
+- [ ] Add customer order history
+- [ ] Create footer
+- [ ] Create misc graphics
+- [ ] Add stock images for realism

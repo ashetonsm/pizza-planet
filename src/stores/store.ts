@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
 import { signInWithEmailAndPassword, signOut, type User } from 'firebase/auth';
 import { db, firebaseAuth } from '../firebase';
-import { addDoc, collection, deleteDoc, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, setDoc } from 'firebase/firestore';
 import { Item, menuItemConverter, orderConverter, type Order } from './Item';
+import { useCollection } from 'vuefire';
 
 export const useMenuStore = defineStore('menuItems', {
     state: (): State => {
@@ -20,106 +21,40 @@ export const useMenuStore = defineStore('menuItems', {
     },
     actions: {
         async setMenuRef() {
-            const querySnapshot = await getDocs(collection(db, "menu").withConverter(menuItemConverter));
-
-            querySnapshot.forEach(async (doc) => {
-                // doc.data() is never undefined for query doc snapshots
-                console.log(doc.data());
-                const pizzaExists = await (this.menuItems).find(
-                    pizza => pizza.name === doc.data().name
-                )
-
-                if (pizzaExists) {
-                    return
-                } else {
-                    this.menuItems.push(doc.data())
-                }
-
-            });
-            console.log('Menu Items:')
-            console.log(this.menuItems)
+            this.menuItems = useCollection(collection(db, 'menu'))
         },
         async setOrdersRef() {
-            const querySnapshot = await getDocs(collection(db, "orders"));
-
-            // Clear the local orders list
-            this.orders = [];
-            querySnapshot.forEach(async (doc) => {
-                // Orders is an array of Basket[]
-                // Each Basket contains an array of Items[] from the menu
-                // Each Item from the menu is an {Item} object
-
-                this.orders.push(doc.data().basket)
-
-
-            });
-            console.log('Orders:')
-            console.log(this.orders)
+            this.orders = useCollection(collection(db, 'orders'))
         },
+        // Creates a new order
         async addOrder(submitted: Item) {
-            // Set with menuItemConverter
-            console.log(submitted)
-            const basket = {
-                items: submitted,
-                date: new Date,
-            }
-
-            // adds an order
-            const docRef = ((await addDoc(collection(db, "orders"), { basket })).withConverter(orderConverter))
-            console.log(docRef)
-            this.setOrdersRef()
-
+            addDoc(collection(db, "orders"), { basket: { items: submitted, date: new Date } })
         },
-        async addNewPizza(pizza: Item) {
-            // Set with menuItemConverter
-            console.log(pizza)
-            const ref = doc(db, "menu", pizza.name).withConverter(menuItemConverter);
-            console.log(ref)
-            // Adds or updates a doc with the same ref. setDoc() requires an id (pizza.name above)
-            await setDoc(ref, new Item(pizza.name, pizza.description, pizza.quantity, pizza.options))
-                .then(() => {
-                    this.setMenuRef()
-                })
+        // Adds or updates a doc with the same ref. setDoc() requires an id (i.name above)
+        async addNewMenuItem(i: Item) {
+            setDoc(doc(db, 'menu', i.name), {
+                name: i.name,
+                description: i.description,
+                quantity: i.quantity,
+                options: i.options
+            })
         },
         async removeItem(item: Item) {
-            // Set with menuItemConverter
-            console.log('Removing from menu:')
-            console.log(item)
             await deleteDoc(doc(db, "menu", item.name))
                 .then(() => {
-                    const filteredArray = this.menuItems.filter(function (mi) {
-                        return mi !== item
-                    })
-                    this.menuItems = filteredArray;
+                    alert(item.name + ' deleted from menu.')
                 })
-            alert(item.name + ' deleted from menu.')
-            console.log(this.menuItems)
-
         },
         async removeOrder(ordered: Order) {
-            // Set with menuItemConverter
-            console.log('Removing from orders:')
-            console.log(ordered)
-
-            const q = query(collection(db, "orders"), where("basket.date", "==", ordered.date));
-            const querySnapshot = await getDocs(q);
-            let toBeDeletedId = '';
-            querySnapshot.forEach((doc) => {
-                // doc.data() is never undefined for query doc snapshots
-                console.log(doc.id, " => ", doc.data());
-                toBeDeletedId = doc.id;
-            });
-
-            await deleteDoc(doc(db, "orders", toBeDeletedId))
+            await deleteDoc(doc(db, 'orders', ordered.id))
                 .then(() => {
-                    const filteredArray = this.orders.filter(function (ord) {
-                        return ord !== ordered
-                    })
-                    this.orders = filteredArray;
+                    alert('Order deleted from menu.')
                 })
-            alert('Order deleted from menu.')
-            console.log(this.orders)
-
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    alert('Error Code: ' + errorCode + '--- Error Message: ' + errorMessage);
+                })
         },
         userStatus(user: User | null) {
             user === null ? this.currentUser = null : this.currentUser = user
@@ -147,12 +82,11 @@ export const useMenuStore = defineStore('menuItems', {
                 // An error occurred.
                 alert(`Sign out error: ${error}`);
             })
-
         }
     }
 })
 interface State {
-    menuItems: Item[],
-    orders: Order[],
+    menuItems: any,
+    orders: any,
     currentUser: User | null
 }

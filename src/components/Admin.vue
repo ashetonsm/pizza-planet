@@ -1,23 +1,17 @@
 <script lang="ts">
-import NewPizza from './NewPizza.vue';
-import Login from './Login.vue';
+import NewMenuItem from './NewMenuItem.vue';
 import { useMenuStore } from '@/stores/store';
 import type { Item, Order } from '@/stores/Item';
 
 export default {
-    name: "Admin",
     components: {
-        NewPizza,
-        Login
+        NewMenuItem
     },
     setup() {
         const menuStore = useMenuStore()
         return { menuStore }
     },
     methods: {
-        signOut() {
-            useMenuStore().signOut()
-        },
         removeItem(item: Item) {
             useMenuStore().removeItem(item)
         },
@@ -30,12 +24,7 @@ export default {
 <template>
     <div class="admin_wrapper">
         <section v-if="menuStore.currentUser !== null">
-
-            <div class="current_user_wrapper">
-                <span>Logged in as: {{ menuStore.currentUser?.email }}</span>
-                <button type="button" class="btn_red" @click="signOut()">Sign Out</button>
-            </div>
-            <NewPizza></NewPizza>
+            <NewMenuItem></NewMenuItem>
             <div class="menu_wrapper">
                 <table>
                     <thead>
@@ -68,7 +57,7 @@ export default {
                                 <button type="button" class="btn_red" @click="removeOrder(order)">&times;</button>
                             </th>
                         </tr>
-                        <tr v-for="orderItem in order.items as Item[]" :key="orderItem.name + index">
+                        <tr v-for="orderItem in order.basket.items as Item[]" :key="orderItem.name + index">
                             <td>{{ orderItem.name }}</td>
                             <td>${{ orderItem.price }}</td>
                             <td>{{ orderItem.size }}"</td>
@@ -78,7 +67,5 @@ export default {
                 </table>
             </div>
         </section>
-
-        <Login v-if="menuStore.currentUser == null" />
     </div>
 </template>
