@@ -32,28 +32,20 @@ export const useMenuStore = defineStore('menuItems', {
         },
         // Adds or updates a doc with the same ref. setDoc() requires an id (i.name above)
         async addNewMenuItem(i: Item) {
-            setDoc(doc(db, 'menu', i.name), { i })
+            setDoc(doc(db, 'menu', i.name), {
+                name: i.name,
+                description: i.description,
+                quantity: i.quantity,
+                options: i.options
+            })
         },
         async removeItem(item: Item) {
-            // Set with menuItemConverter
-            console.log('Removing from menu:')
-            console.log(item)
             await deleteDoc(doc(db, "menu", item.name))
                 .then(() => {
-                    const filteredArray = this.menuItems.filter(function (mi: Item) {
-                        return mi !== item
-                    })
-                    this.menuItems = filteredArray;
+                    alert(item.name + ' deleted from menu.')
                 })
-            alert(item.name + ' deleted from menu.')
-            console.log(this.menuItems)
-
         },
         async removeOrder(ordered: Order) {
-            // Set with menuItemConverter
-            console.log('Removing from orders:')
-            console.log(ordered)
-
             await deleteDoc(doc(db, 'orders', ordered.id))
                 .then(() => {
                     alert('Order deleted from menu.')
@@ -90,7 +82,6 @@ export const useMenuStore = defineStore('menuItems', {
                 // An error occurred.
                 alert(`Sign out error: ${error}`);
             })
-
         }
     }
 })
