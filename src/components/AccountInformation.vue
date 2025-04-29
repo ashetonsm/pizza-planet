@@ -1,9 +1,7 @@
 <script lang="ts">
-import NewMenuItem from './NewMenuItem.vue';
 import Login from './Login.vue';
 import Admin from './Admin.vue';
 import { useMenuStore } from '@/stores/store';
-import type { Item, Order } from '@/stores/Item';
 
 export default {
     setup() {
@@ -26,5 +24,7 @@ export default {
         <Admin></Admin>
     </div>
 
-    <Login v-if="menuStore.currentUser == null" />
+    <section v-if="menuStore.currentUser == null">
+        <Login />
+    </section>
 </template>
