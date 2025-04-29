@@ -10,6 +10,7 @@ import { VueFire, VueFireAuth } from 'vuefire'
 import Header from './components/Header.vue'
 import Admin from './components/Admin.vue'
 import Login from './components/Login.vue'
+import Register from './components/Register.vue'
 
 const app = createApp(App)
 
@@ -26,5 +27,6 @@ app.use(VueFire, {
 app.component('Header', Header)
 app.component('Admin', Admin)
 app.component('Login', Login)
+app.component('Register', Register)
 
 app.mount('#app')
