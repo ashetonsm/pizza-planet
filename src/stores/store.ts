@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
-import { signInWithEmailAndPassword, signOut, type User } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, type User } from 'firebase/auth';
 import { db, firebaseAuth } from '../firebase';
 import { addDoc, collection, deleteDoc, doc, setDoc } from 'firebase/firestore';
-import { Item, menuItemConverter, orderConverter, type Order } from './Item';
+import { Item, type Order } from './Item';
 import { useCollection } from 'vuefire';
 
 export const useMenuStore = defineStore('menuItems', {
@@ -58,6 +58,20 @@ export const useMenuStore = defineStore('menuItems', {
         },
         userStatus(user: User | null) {
             user === null ? this.currentUser = null : this.currentUser = user
+        },
+        async createUser(email: string, password: string) {
+            createUserWithEmailAndPassword(firebaseAuth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    console.log('Successfully created new user:', userCredential.user.uid);
+                    alert('Welcome, ' + user.email);
+                    this.currentUser = user;
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    alert('Error Code: ' + errorCode + '--- Error Message: ' + errorMessage);
+                })
         },
         async signIn(username: string, password: string) {
             signInWithEmailAndPassword(firebaseAuth, username, password)
