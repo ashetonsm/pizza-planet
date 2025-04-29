@@ -26,30 +26,13 @@ export const useMenuStore = defineStore('menuItems', {
         async setOrdersRef() {
             this.orders = useCollection(collection(db, 'orders'))
         },
+        // Creates a new order
         async addOrder(submitted: Item) {
-            // Set with menuItemConverter
-            console.log(submitted)
-            const basket = {
-                items: submitted,
-                date: new Date,
-            }
-
-            // adds an order
-            const docRef = ((await addDoc(collection(db, "orders"), { basket })).withConverter(orderConverter))
-            console.log(docRef)
-            this.setOrdersRef()
-
+            addDoc(collection(db, "orders"), { basket: { items: submitted, date: new Date } })
         },
+        // Adds or updates a doc with the same ref. setDoc() requires an id (i.name above)
         async addNewMenuItem(i: Item) {
-            // Set with menuItemConverter
-            console.log(i)
-            const ref = doc(db, "menu", i.name).withConverter(menuItemConverter);
-            console.log(ref)
-            // Adds or updates a doc with the same ref. setDoc() requires an id (i.name above)
-            await setDoc(ref, new Item(i.name, i.description, i.quantity, i.options))
-                .then(() => {
-                    this.setMenuRef()
-                })
+            setDoc(doc(db, 'menu', i.name), { i })
         },
         async removeItem(item: Item) {
             // Set with menuItemConverter
