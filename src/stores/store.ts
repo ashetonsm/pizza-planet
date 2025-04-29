@@ -40,13 +40,13 @@ export const useMenuStore = defineStore('menuItems', {
             this.setOrdersRef()
 
         },
-        async addNewPizza(pizza: Item) {
+        async addNewMenuItem(i: Item) {
             // Set with menuItemConverter
-            console.log(pizza)
-            const ref = doc(db, "menu", pizza.name).withConverter(menuItemConverter);
+            console.log(i)
+            const ref = doc(db, "menu", i.name).withConverter(menuItemConverter);
             console.log(ref)
-            // Adds or updates a doc with the same ref. setDoc() requires an id (pizza.name above)
-            await setDoc(ref, new Item(pizza.name, pizza.description, pizza.quantity, pizza.options))
+            // Adds or updates a doc with the same ref. setDoc() requires an id (i.name above)
+            await setDoc(ref, new Item(i.name, i.description, i.quantity, i.options))
                 .then(() => {
                     this.setMenuRef()
                 })

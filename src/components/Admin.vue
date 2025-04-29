@@ -1,5 +1,5 @@
 <script lang="ts">
-import NewPizza from './NewPizza.vue';
+import NewMenuItem from './NewMenuItem.vue';
 import Login from './Login.vue';
 import { useMenuStore } from '@/stores/store';
 import type { Item, Order } from '@/stores/Item';
@@ -7,7 +7,7 @@ import type { Item, Order } from '@/stores/Item';
 export default {
     name: "Admin",
     components: {
-        NewPizza,
+        NewMenuItem,
         Login
     },
     setup() {
@@ -35,7 +35,7 @@ export default {
                 <span>Logged in as: {{ menuStore.currentUser?.email }}</span>
                 <button type="button" class="btn_red" @click="signOut()">Sign Out</button>
             </div>
-            <NewPizza></NewPizza>
+            <NewMenuItem></NewMenuItem>
             <div class="menu_wrapper">
                 <table>
                     <thead>
