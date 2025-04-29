@@ -8,6 +8,8 @@ import App from './App.vue'
 import router from './router'
 import { VueFire, VueFireAuth } from 'vuefire'
 import Header from './components/Header.vue'
+import Admin from './components/Admin.vue'
+import Login from './components/Login.vue'
 
 const app = createApp(App)
 
@@ -20,6 +22,9 @@ app.use(VueFire, {
     ]
 
 })
+
 app.component('Header', Header)
+app.component('Admin', Admin)
+app.component('Login', Login)
 
 app.mount('#app')
