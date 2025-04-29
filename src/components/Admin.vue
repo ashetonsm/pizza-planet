@@ -1,23 +1,17 @@
 <script lang="ts">
 import NewMenuItem from './NewMenuItem.vue';
-import Login from './Login.vue';
 import { useMenuStore } from '@/stores/store';
 import type { Item, Order } from '@/stores/Item';
 
 export default {
-    name: "Admin",
     components: {
-        NewMenuItem,
-        Login
+        NewMenuItem
     },
     setup() {
         const menuStore = useMenuStore()
         return { menuStore }
     },
     methods: {
-        signOut() {
-            useMenuStore().signOut()
-        },
         removeItem(item: Item) {
             useMenuStore().removeItem(item)
         },
@@ -30,11 +24,6 @@ export default {
 <template>
     <div class="admin_wrapper">
         <section v-if="menuStore.currentUser !== null">
-
-            <div class="current_user_wrapper">
-                <span>Logged in as: {{ menuStore.currentUser?.email }}</span>
-                <button type="button" class="btn_red" @click="signOut()">Sign Out</button>
-            </div>
             <NewMenuItem></NewMenuItem>
             <div class="menu_wrapper">
                 <table>
@@ -78,7 +67,5 @@ export default {
                 </table>
             </div>
         </section>
-
-        <Login v-if="menuStore.currentUser == null" />
     </div>
 </template>
