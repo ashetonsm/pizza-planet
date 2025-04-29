@@ -1,5 +1,5 @@
 import HomeView from '@/views/HomeView.vue'
-import AdminView from '@/views/AdminView.vue'
+import AccountView from '@/views/AccountView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 import History from '@/components/History.vue'
 import Delivery from '@/components/Delivery.vue'
@@ -31,9 +31,9 @@ export const routes = [
     component: () => import('@/views/MenuView.vue')
   },
   {
-    path: '/admin',
-    name: 'admin',
-    component: AdminView,
+    path: '/account',
+    name: 'account',
+    component: AccountView,
   },
   {
     path: '/contact',
