@@ -8,6 +8,7 @@ export default {
     console.log('HELLO')
     useMenuStore().setMenuRef()
     useMenuStore().setOrdersRef()
+    useMenuStore().setAdminsRef()
   }
 }
 </script>
