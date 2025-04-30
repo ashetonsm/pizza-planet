@@ -10,14 +10,17 @@ export const useMenuStore = defineStore('menuItems', {
         return {
             menuItems: [],
             orders: [],
-            currentUser: null
+            currentUser: null,
+            admins: [],
+            admin: false
         }
     },
 
     getters: {
         getMenuItems: state => state.menuItems,
         getNumberOfOrders: state => state.orders.length,
-        getCurrentUser: state => state.currentUser?.email
+        getCurrentUser: state => state.currentUser,
+        getAdminStatus: state => state.admin
     },
     actions: {
         async setMenuRef() {
@@ -25,6 +28,19 @@ export const useMenuStore = defineStore('menuItems', {
         },
         async setOrdersRef() {
             this.orders = useCollection(collection(db, 'orders'))
+        },
+        async setAdminsRef() {
+            this.admins = useCollection(collection(db, 'admins'))
+        },
+        async setAdminStatus() {
+            console.log(this.admins)
+            this.admins.forEach((a: { uid: string | undefined; }) => {
+                console.log(a.uid)
+                console.log(this.currentUser)
+                if (a.uid == this.currentUser?.uid) {
+                    this.admin = true;
+                }
+            });
         },
         // Creates a new order
         async addOrder(submitted: Item) {
@@ -81,17 +97,22 @@ export const useMenuStore = defineStore('menuItems', {
                     alert('Welcome, ' + user.email);
                     this.currentUser = user;
                 })
+                .then(() => {
+                    this.setAdminStatus()
+                })
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
                     alert('Error Code: ' + errorCode + '--- Error Message: ' + errorMessage);
                 })
+
         },
         async signOut() {
             signOut(firebaseAuth).then(() => {
                 // Sign-out successful.
                 alert('You have been signed out. Goodbye!');
                 this.userStatus(null)
+                this.admin = false
             }).catch((error) => {
                 // An error occurred.
                 alert(`Sign out error: ${error}`);
@@ -103,4 +124,6 @@ interface State {
     menuItems: any,
     orders: any,
     currentUser: User | null
+    admin: boolean
+    admins: any
 }
