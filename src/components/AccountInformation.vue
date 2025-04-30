@@ -21,7 +21,9 @@ export default {
             <p>Logged in as: {{ menuStore.currentUser?.email }}</p>
             <button type="button" class="btn_red" @click="signOut()">Sign Out</button>
         </section>
-        <Admin></Admin>
+        <section v-if="menuStore.admin === true">
+            <Admin></Admin>
+        </section>
     </div>
 
     <section v-if="menuStore.currentUser == null">
