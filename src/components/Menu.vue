@@ -5,6 +5,7 @@ type Options = {
 }
 import type { Item } from '@/stores/Item';
 import { useMenuStore } from '@/stores/store.ts'
+import Login from './Login.vue';
 
 export default {
     data() {
@@ -116,7 +117,14 @@ export default {
                     </tbody>
                 </table>
                 <p>Order Total: ${{ total.toFixed(2) }}</p>
-                <button class="btn_green" @click="addNewOrder">Place Order</button>
+
+                <section v-if="menuStore.currentUser == null">
+                    <p>You're not signed in!</p>
+                    <Login></Login>
+                </section>
+                <section v-if="menuStore.currentUser !== null">
+                    <button class="btn_green" @click="addNewOrder">Place Order</button>
+                </section>
             </div>
             <div v-else>
                 <h3>{{ basketText }}</h3> {{ menuStore.orders.length }}
