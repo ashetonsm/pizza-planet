@@ -44,7 +44,14 @@ export const useMenuStore = defineStore('menuItems', {
         },
         // Creates a new order
         async addOrder(submitted: Item) {
-            addDoc(collection(db, "orders"), { basket: { items: submitted, date: new Date } })
+            addDoc(collection(db, "orders"), {
+                basket:
+                {
+                    items: submitted,
+                    date: new Date,
+                    user: this.currentUser === null ? '' : this.currentUser?.uid
+                }
+            })
         },
         // Adds or updates a doc with the same ref. setDoc() requires an id (i.name above)
         async addNewMenuItem(i: Item) {
