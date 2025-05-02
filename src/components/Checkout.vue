@@ -1,6 +1,13 @@
 <script lang="ts">
+import { useMenuStore } from '@/stores/store.ts'
+
+
 export default {
     name: "Checkout",
+    setup() {
+        const menuStore = useMenuStore()
+        return { menuStore }
+    },
     data() {
         return {
             deliveryAddress: {
@@ -24,6 +31,19 @@ export default {
             deliverySameAsBillingAddress: false
         }
     },
+    methods: {
+        checkout() {
+            this.menuStore.addOrder(
+                this.menuStore.currentBasket[0],
+                this.paymentInformation,
+                this.deliveryAddress,
+                this.billingAddress
+            )
+            alert('Your order has been placed!')
+            this.menuStore.clearCurrentBasket()
+            this.$router.push({ name: 'account' })
+        }
+    }
 }
 </script>
 <template>
@@ -121,7 +141,7 @@ export default {
                 <input type="year" id="expiration-year" v-model="paymentInformation.expYear">
 
             </div>
-            <input id="submit" class="submit btn_green" type="submit" @click.prevent="" value="Submit" />
+            <input id="submit" class="submit btn_green" type="submit" @click.prevent="checkout()" value="Submit" />
         </form>
         {{ billingAddress }}
         {{ deliveryAddress }}
