@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, type User } from 'firebase/auth';
 import { db, firebaseAuth } from '../firebase';
-import { addDoc, collection, deleteDoc, doc, setDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import { Item, type Order } from './Item';
 import { useCollection } from 'vuefire';
 
@@ -28,7 +28,19 @@ export const useMenuStore = defineStore('menuItems', {
             this.menuItems = useCollection(collection(db, 'menu'))
         },
         async setOrdersRef() {
-            this.orders = useCollection(collection(db, 'orders'))
+            const a = this.getAdminStatus;
+            if (a == true) {
+                console.log('Displaying all orders for an admin account.')
+                this.orders = useCollection(collection(db, 'orders'))
+            } else {
+                console.log('Displaying only orders by logged in non-admin user.')
+                const q = query(collection(db, 'orders'), where('user', "==", this.currentUser?.uid));
+                const querySnapshot = await getDocs(q);
+                querySnapshot.forEach((doc) => {
+                    console.log(doc.id, " => ", doc.data())
+                    this.orders.push(doc.data())
+                })
+            }
         },
         async setAdminsRef() {
             this.admins = useCollection(collection(db, 'admins'))
@@ -40,12 +52,10 @@ export const useMenuStore = defineStore('menuItems', {
             this.currentBasket = []
         },
         async setAdminStatus() {
-            console.log(this.admins)
             this.admins.forEach((a: { uid: string | undefined; }) => {
-                console.log(a.uid)
-                console.log(this.currentUser)
                 if (a.uid == this.currentUser?.uid) {
-                    this.admin = true;
+                    console.log('Logged in user IS an admin')
+                    return this.admin = true;
                 }
             });
         },
@@ -114,8 +124,8 @@ export const useMenuStore = defineStore('menuItems', {
                     alert('Welcome, ' + user.email);
                     this.currentUser = user;
                 })
-                .then(() => {
-                    this.setAdminStatus()
+                .then(async () => {
+                    await this.setAdminStatus()
                 })
                 .catch((error) => {
                     const errorCode = error.code;
@@ -129,6 +139,7 @@ export const useMenuStore = defineStore('menuItems', {
                 // Sign-out successful.
                 alert('You have been signed out. Goodbye!');
                 this.userStatus(null)
+                this.orders = []
                 this.admin = false
             }).catch((error) => {
                 // An error occurred.
