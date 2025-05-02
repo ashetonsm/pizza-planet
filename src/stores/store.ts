@@ -9,6 +9,7 @@ export const useMenuStore = defineStore('menuItems', {
     state: (): State => {
         return {
             menuItems: [],
+            currentBasket: [],
             orders: [],
             currentUser: null,
             admins: [],
@@ -32,6 +33,12 @@ export const useMenuStore = defineStore('menuItems', {
         async setAdminsRef() {
             this.admins = useCollection(collection(db, 'admins'))
         },
+        async setCurrentBasket(newItems: Item) {
+            this.currentBasket.push(newItems)
+        },
+        async clearCurrentBasket() {
+            this.currentBasket = []
+        },
         async setAdminStatus() {
             console.log(this.admins)
             this.admins.forEach((a: { uid: string | undefined; }) => {
@@ -43,14 +50,17 @@ export const useMenuStore = defineStore('menuItems', {
             });
         },
         // Creates a new order
-        async addOrder(submitted: Item) {
+        async addOrder(submitted: Item, payment: { cardNumber: string; cvv: string; expMonth: string; expYear: string; }, delivery: { street: string; city: string; state: string; zip: string; }, billing: { street: string; city: string; state: string; zip: string; }) {
             addDoc(collection(db, "orders"), {
                 basket:
                 {
                     items: submitted,
-                    date: new Date,
-                    user: this.currentUser === null ? '' : this.currentUser?.uid
-                }
+                },
+                date: new Date,
+                user: this.currentUser === null ? '' : this.currentUser?.uid,
+                paymentInformation: payment,
+                deliveryAddress: delivery,
+                billingAddress: billing
             })
         },
         // Adds or updates a doc with the same ref. setDoc() requires an id (i.name above)
@@ -129,6 +139,7 @@ export const useMenuStore = defineStore('menuItems', {
 })
 interface State {
     menuItems: any,
+    currentBasket: any,
     orders: any,
     currentUser: User | null
     admin: boolean
