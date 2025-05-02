@@ -5,9 +5,8 @@ import { useMenuStore } from './stores/store';
 export default {
   name: 'app',
   setup() {
-    console.log('HELLO')
+    console.log('HELLO FROM APP.VUE')
     useMenuStore().setMenuRef()
-    useMenuStore().setOrdersRef()
     useMenuStore().setAdminsRef()
   }
 }
