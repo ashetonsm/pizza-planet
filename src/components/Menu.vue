@@ -20,9 +20,12 @@ export default {
     },
     methods: {
         addNewOrder() {
-            this.menuStore.addOrder(this.basket as unknown as Item)
-            this.basket = [];
-            this.basketText = 'Thank you, your order has been placed!'
+            this.menuStore.setCurrentBasket(this.basket as unknown as Item)
+                .then(() => {
+                    this.basket = [];
+                    this.basketText = 'Thank you, your order has been placed!'
+                    this.$router.push({ name: 'checkout' })
+                })
         },
         async addToBasket(item: Item, options: Options) {
             let thisItem: Item = item;
