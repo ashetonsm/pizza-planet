@@ -18,10 +18,12 @@ export default {
         <section v-if="menuStore.currentUser !== null">
             <p>Logged in as: {{ menuStore.currentUser?.email }}</p>
             <button type="button" class="btn_red" @click="signOut()">Sign Out</button>
-            <OrderHistory></OrderHistory>
         </section>
         <section v-if="menuStore.admin === true">
             <Admin></Admin>
+        </section>
+        <section v-else="menuStore.admin === false">
+            <OrderHistory></OrderHistory>
         </section>
     </div>
 
