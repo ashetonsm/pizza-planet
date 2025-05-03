@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, type User } from 'firebase/auth';
 import { db, firebaseAuth } from '../firebase';
-import { addDoc, collection, deleteDoc, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
+import { arrayUnion, collection, deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { Item, Order } from './Item';
-import { useCollection } from 'vuefire';
+import { useCollection, useDocument } from 'vuefire';
 
 export const useMenuStore = defineStore('menuItems', {
     state: (): State => {
@@ -31,23 +31,10 @@ export const useMenuStore = defineStore('menuItems', {
             if (this.getAdminStatus == true) {
                 console.log('Displaying all orders for an admin account.')
                 this.orders = useCollection(collection(db, 'orders'))
+                console.log(await this.orders)
             } else {
                 console.log('Displaying only orders by logged in non-admin user.')
-                const q = query(collection(db, 'orders'), where('user', "==", this.currentUser?.uid));
-                const querySnapshot = await getDocs(q);
-                querySnapshot.forEach((doc) => {
-                    const o = {
-                        id: doc.id,
-                        basket: doc.data().basket,
-                        date: doc.data().date,
-                        user: doc.data().user,
-                        paymentInformation: doc.data().paymentInformation,
-                        deliveryAddress: doc.data().deliveryAddress,
-                        billingAddress: doc.data().deliveryAddress
-                    }
-
-                    this.orders.push(o)
-                })
+                this.orders = useDocument(doc(collection(db, 'orders'), this.currentUser!.uid))
             }
         },
         async setAdminsRef() {
@@ -69,17 +56,31 @@ export const useMenuStore = defineStore('menuItems', {
         },
         // Creates a new order
         async addOrder(submitted: Item, payment: { cardNumber: string; cvv: string; expMonth: string; expYear: string; }, delivery: { street: string; city: string; state: string; zip: string; }, billing: { street: string; city: string; state: string; zip: string; }) {
-            addDoc(collection(db, "orders"), {
-                basket:
-                {
-                    items: submitted,
-                },
-                date: new Date,
-                user: this.currentUser === null ? '' : this.currentUser?.uid,
-                paymentInformation: payment,
-                deliveryAddress: delivery,
-                billingAddress: billing
-            })
+            console.log(await this.orders)
+            if (await this.orders.length < 1) {
+                setDoc(doc(db, 'orders', this.currentUser!.uid), {
+                    orders: [{
+                        basket: { items: submitted },
+                        date: new Date,
+                        user: this.currentUser === null ? '' : this.currentUser?.uid,
+                        paymentInformation: payment,
+                        deliveryAddress: delivery,
+                        billingAddress: billing
+                    }]
+                })
+            } else {
+                console.log(await this.orders)
+                await updateDoc(doc(db, 'orders', this.currentUser!.uid), {
+                    orders: arrayUnion({
+                        basket: { items: submitted },
+                        date: new Date,
+                        user: this.currentUser === null ? '' : this.currentUser?.uid,
+                        paymentInformation: payment,
+                        deliveryAddress: delivery,
+                        billingAddress: billing
+                    })
+                })
+            }
         },
         // Adds or updates a doc with the same ref. setDoc() requires an id (i.name above)
         async addNewMenuItem(i: Item) {
