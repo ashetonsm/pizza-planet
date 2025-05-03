@@ -18,9 +18,9 @@ export default {
 </script>
 <template>
     <div class="orders_wrapper">
-        <h3>Past Orders: ({{ menuStore.getNumberOfOrders }})</h3>
+        <h3>Past Orders:</h3>
         <table>
-            <tbody v-for="(order, index) in menuStore.orders" :key="index">
+            <tbody v-for="(order, index) in menuStore.orders.orders" :key="index">
                 <tr class="order_number">
                     <th colspan="4">
                         <strong>Order Id: {{ index + 1 }}</strong>
