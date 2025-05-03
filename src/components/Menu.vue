@@ -130,7 +130,7 @@ export default {
                 </section>
             </div>
             <div v-else>
-                <h3>{{ basketText }}</h3> {{ menuStore.orders.length }}
+                <h3>{{ basketText }}</h3>
             </div>
         </div>
     </div>
