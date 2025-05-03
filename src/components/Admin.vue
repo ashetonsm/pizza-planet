@@ -12,6 +12,9 @@ export default {
         return { menuStore }
     },
     methods: {
+        fetchOrders() {
+            useMenuStore().setOrdersRef()
+        },
         removeItem(item: Item) {
             useMenuStore().removeItem(item)
         },
@@ -49,20 +52,21 @@ export default {
             </table>
         </div>
         <div class="orders_wrapper">
-            <h3>Current Orders: ({{ menuStore.getNumberOfOrders }})</h3>
+            <button @click="fetchOrders()">Fetch Orders</button>
+            <h3>Current Orders:</h3>
             <table>
-                <tbody v-for="(order, index) in menuStore.orders" :key="index">
+                <!-- Now an array of orders -->
+                <tbody v-for="(orderArray, index) in menuStore.orders" :key="index">
                     <tr class="order_number">
                         <th colspan="4">
                             <strong>Order Id: {{ index + 1 }}</strong>
-                            <button type="button" class="btn_red" @click="removeOrder(order)">&times;</button>
+                            <!-- <button type="button" class="btn_red" @click="removeOrder(orderArray)">&times;</button> -->
                         </th>
                     </tr>
-                    <tr v-for="orderItem in order.basket.items as Item[]" :key="orderItem.name + index">
-                        <td>{{ orderItem.name }}</td>
-                        <td>${{ orderItem.price }}</td>
-                        <td>{{ orderItem.size }}"</td>
-                        <td>Qty: {{ orderItem.quantity }}</td>
+                    <!-- Now an array of order objects -->
+                    <tr v-for="usersOrders in orderArray.orders as any" :key="usersOrders.id + index">
+                        <td>{{ usersOrders.basket.items }}</td>
+
                     </tr>
                 </tbody>
             </table>
