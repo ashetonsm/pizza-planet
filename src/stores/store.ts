@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, type User } from 'firebase/auth';
 import { db, firebaseAuth } from '../firebase';
 import { addDoc, collection, deleteDoc, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
-import { Item, type Order } from './Item';
+import { Item, Order } from './Item';
 import { useCollection } from 'vuefire';
 
 export const useMenuStore = defineStore('menuItems', {
@@ -28,8 +28,7 @@ export const useMenuStore = defineStore('menuItems', {
             this.menuItems = useCollection(collection(db, 'menu'))
         },
         async setOrdersRef() {
-            const a = this.getAdminStatus;
-            if (a == true) {
+            if (this.getAdminStatus == true) {
                 console.log('Displaying all orders for an admin account.')
                 this.orders = useCollection(collection(db, 'orders'))
             } else {
@@ -37,8 +36,17 @@ export const useMenuStore = defineStore('menuItems', {
                 const q = query(collection(db, 'orders'), where('user', "==", this.currentUser?.uid));
                 const querySnapshot = await getDocs(q);
                 querySnapshot.forEach((doc) => {
-                    console.log(doc.id, " => ", doc.data())
-                    this.orders.push(doc.data())
+                    const o = {
+                        id: doc.id,
+                        basket: doc.data().basket,
+                        date: doc.data().date,
+                        user: doc.data().user,
+                        paymentInformation: doc.data().paymentInformation,
+                        deliveryAddress: doc.data().deliveryAddress,
+                        billingAddress: doc.data().deliveryAddress
+                    }
+
+                    this.orders.push(o)
                 })
             }
         },
@@ -91,7 +99,7 @@ export const useMenuStore = defineStore('menuItems', {
         async removeOrder(ordered: Order) {
             await deleteDoc(doc(db, 'orders', ordered.id))
                 .then(() => {
-                    alert('Order deleted from menu.')
+                    alert('Order deleted.')
                 })
                 .catch((error) => {
                     const errorCode = error.code;
@@ -126,6 +134,9 @@ export const useMenuStore = defineStore('menuItems', {
                 })
                 .then(async () => {
                     await this.setAdminStatus()
+                })
+                .then(async () => {
+                    await this.setOrdersRef()
                 })
                 .catch((error) => {
                     const errorCode = error.code;
