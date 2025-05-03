@@ -1,13 +1,18 @@
 <script lang="ts">
-import NewMenuItem from './NewMenuItem.vue';
-import Login from './Login.vue';
 import { useMenuStore } from '@/stores/store';
-import type { Item, Order } from '@/stores/Item';
+import { Order, Item } from '@/stores/Item';
 
 export default {
     setup() {
         const menuStore = useMenuStore()
         return { menuStore }
+    },
+    methods: {
+        removeOrder(order: Order) {
+            if (confirm('Remove Order?')) {
+                useMenuStore().removeOrder(order)
+            }
+        }
     }
 }
 </script>

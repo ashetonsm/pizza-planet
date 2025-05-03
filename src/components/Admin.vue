@@ -16,7 +16,9 @@ export default {
             useMenuStore().removeItem(item)
         },
         removeOrder(order: Order) {
-            useMenuStore().removeOrder(order)
+            if (confirm('Remove Order?')) {
+                useMenuStore().removeOrder(order)
+            }
         }
     }
 }
