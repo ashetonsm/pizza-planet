@@ -12,9 +12,6 @@ export default {
         return { menuStore }
     },
     methods: {
-        fetchOrders() {
-            useMenuStore().setOrdersRef()
-        },
         removeItem(item: Item) {
             useMenuStore().removeItem(item)
         },
@@ -52,7 +49,6 @@ export default {
             </table>
         </div>
         <div class="orders_wrapper">
-            <button @click="fetchOrders()">Fetch Orders</button>
             <h3>Current Orders:</h3>
             <table>
                 <!-- Now an array of orders -->
