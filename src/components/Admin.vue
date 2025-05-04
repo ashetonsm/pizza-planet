@@ -65,7 +65,10 @@ export default {
                     </tr>
                     <!-- Now an array of order objects -->
                     <tr v-for="usersOrders in orderArray.orders as any" :key="usersOrders.id + index">
-                        <td>{{ usersOrders.basket.items }}</td>
+                        <td v-for="item in usersOrders.basket.items">{{ item.name }}</td>
+                        <td v-for="item in usersOrders.basket.items">{{ item.size }}"</td>
+                        <td v-for="item in usersOrders.basket.items">${{ item.price }}</td>
+                        <td v-for="item in usersOrders.basket.items">Qty: {{ item.quantity }}</td>
 
                     </tr>
                 </tbody>

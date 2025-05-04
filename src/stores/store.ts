@@ -46,6 +46,9 @@ export const useMenuStore = defineStore('menuItems', {
         async clearCurrentBasket() {
             this.currentBasket = []
         },
+        async clearOrders() {
+            this.orders = []
+        },
         async setAdminStatus() {
             this.admins.forEach((a: { uid: string | undefined; }) => {
                 if (a.uid == this.currentUser?.uid) {
@@ -163,7 +166,7 @@ export const useMenuStore = defineStore('menuItems', {
                 // Sign-out successful.
                 alert('You have been signed out. Goodbye!');
                 this.userStatus(null)
-                this.orders = []
+                this.clearOrders()
                 this.admin = false
             }).catch((error) => {
                 // An error occurred.
