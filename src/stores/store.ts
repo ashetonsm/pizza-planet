@@ -80,6 +80,18 @@ export const useMenuStore = defineStore('menuItems', {
                         billingAddress: billing
                     })
                 })
+                    .catch((error) => {
+                        setDoc(doc(db, 'orders', this.currentUser!.uid), {
+                            orders: [{
+                                basket: { items: submitted },
+                                date: new Date,
+                                user: this.currentUser === null ? '' : this.currentUser?.uid,
+                                paymentInformation: payment,
+                                deliveryAddress: delivery,
+                                billingAddress: billing
+                            }]
+                        })
+                    })
             }
         },
         // Adds or updates a doc with the same ref. setDoc() requires an id (i.name above)
