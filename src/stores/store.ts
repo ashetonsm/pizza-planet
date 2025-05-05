@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, type User } from 'firebase/auth';
 import { db, firebaseAuth } from '../firebase';
-import { arrayUnion, collection, deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore';
-import { Item, Order } from './Item';
+import { arrayRemove, arrayUnion, collection, deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore';
+import { Item } from './Item';
 import { useCollection, useDocument } from 'vuefire';
 
 export const useMenuStore = defineStore('menuItems', {
@@ -31,7 +31,6 @@ export const useMenuStore = defineStore('menuItems', {
             if (this.getAdminStatus == true) {
                 console.log('Displaying all orders for an admin account.')
                 this.orders = useCollection(collection(db, 'orders'))
-                console.log(await this.orders)
             } else {
                 console.log('Displaying only orders by logged in non-admin user.')
                 this.orders = useDocument(doc(collection(db, 'orders'), this.currentUser!.uid))
@@ -58,9 +57,22 @@ export const useMenuStore = defineStore('menuItems', {
             });
         },
         // Creates a new order
-        async addOrder(submitted: Item, payment: { cardNumber: string; cvv: string; expMonth: string; expYear: string; }, delivery: { street: string; city: string; state: string; zip: string; }, billing: { street: string; city: string; state: string; zip: string; }) {
-            console.log(await this.orders)
-            if (await this.orders.length < 1) {
+        async addOrder(submitted: Item,
+            payment: { cardNumber: string; cvv: string; expMonth: string; expYear: string; },
+            delivery: { street: string; city: string; state: string; zip: string; },
+            billing: { street: string; city: string; state: string; zip: string; }) {
+            if (this.orders == null) {
+                setDoc(doc(db, 'orders', this.currentUser!.uid), {
+                    orders: [{
+                        basket: { items: submitted },
+                        date: new Date,
+                        user: this.currentUser === null ? '' : this.currentUser?.uid,
+                        paymentInformation: payment,
+                        deliveryAddress: delivery,
+                        billingAddress: billing
+                    }]
+                })
+            } else if (await this.orders.length < 1) {
                 setDoc(doc(db, 'orders', this.currentUser!.uid), {
                     orders: [{
                         basket: { items: submitted },
@@ -72,7 +84,6 @@ export const useMenuStore = defineStore('menuItems', {
                     }]
                 })
             } else {
-                console.log(await this.orders)
                 await updateDoc(doc(db, 'orders', this.currentUser!.uid), {
                     orders: arrayUnion({
                         basket: { items: submitted },
@@ -84,6 +95,9 @@ export const useMenuStore = defineStore('menuItems', {
                     })
                 })
                     .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        alert('Error Code: ' + errorCode + '--- Error Message: ' + errorMessage);
                         setDoc(doc(db, 'orders', this.currentUser!.uid), {
                             orders: [{
                                 basket: { items: submitted },
@@ -112,11 +126,10 @@ export const useMenuStore = defineStore('menuItems', {
                     alert(item.name + ' deleted from menu.')
                 })
         },
-        async removeOrder(ordered: Order) {
-            await deleteDoc(doc(db, 'orders', ordered.id))
-                .then(() => {
-                    alert('Order deleted.')
-                })
+        async removeOrder(submitted: any) {
+            await updateDoc(doc(db, 'orders', this.currentUser!.uid), {
+                orders: arrayRemove(submitted)
+            })
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
