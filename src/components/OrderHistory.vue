@@ -1,6 +1,9 @@
 <script lang="ts">
 import { useMenuStore } from '@/stores/store';
-import { Order, Item } from '@/stores/Item';
+import { Order } from '@/stores/Item';
+import { collection, doc } from 'firebase/firestore';
+import { useDocument } from 'vuefire';
+import { db } from '@/firebase';
 
 export default {
     setup() {
@@ -9,9 +12,10 @@ export default {
     },
     methods: {
         removeOrder(order: Order) {
-            if (confirm('Remove Order?')) {
-                useMenuStore().removeOrder(order)
-            }
+            console.log(order)
+            // if (confirm('Remove Order?')) {
+            useMenuStore().removeOrder(order)
+            // }
         }
     }
 }
@@ -20,18 +24,25 @@ export default {
     <div class="orders_wrapper">
         <h3>Past Orders:</h3>
         <table>
-            <tbody v-for="(order, index) in menuStore.orders.orders" :key="index">
+            <!-- Now an array of orders -->
+            <tbody v-for="(orderArray, index) in menuStore.orders" :key="index">
                 <tr class="order_number">
-                    <th colspan="4">
-                        <strong>Order Id: {{ index + 1 }}</strong>
-                        <button type="button" class="btn_red" @click="removeOrder(order)">&times;</button>
-                    </th>
+                    <th>Remove Order</th>
+                    <th>User Id: {{ index + 1 }}</th>
+                    <th>Basket</th>
                 </tr>
-                <tr v-for="orderItem in order.basket.items as Item[]" :key="orderItem.name + index">
-                    <td>{{ orderItem.name }}</td>
-                    <td>${{ orderItem.price }}</td>
-                    <td>{{ orderItem.size }}"</td>
-                    <td>Qty: {{ orderItem.quantity }}</td>
+                <!-- Now an array of order objects -->
+                <tr v-for="(usersOrders, index) in orderArray.orders as any" :key="usersOrders.date + index">
+                    <th><button class="btn_red remove-order-button" @click="removeOrder(usersOrders)">Remove
+                            Order</button></th>
+                    <th>User ID</th>
+                <tr v-for="(item, index) in usersOrders.basket.items"
+                    :key="item.name + item.size + item.quantity + index">
+                    {{ item.name }}
+                    <td>{{ item.size }}"</td>
+                    <td>${{ item.price }}</td>
+                    <td>Qty: {{ item.quantity }}</td>
+                </tr>
                 </tr>
             </tbody>
         </table>
