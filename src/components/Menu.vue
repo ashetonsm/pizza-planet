@@ -5,6 +5,7 @@ type Options = {
 }
 import type { Item } from '@/stores/Item';
 import { useMenuStore } from '@/stores/store.ts'
+import Login from './Login.vue';
 
 export default {
     data() {
@@ -19,9 +20,12 @@ export default {
     },
     methods: {
         addNewOrder() {
-            this.menuStore.addOrder(this.basket as unknown as Item)
-            this.basket = [];
-            this.basketText = 'Thank you, your order has been placed!'
+            this.menuStore.setCurrentBasket(this.basket as unknown as Item)
+                .then(() => {
+                    this.basket = [];
+                    this.basketText = 'Thank you, your order has been placed!'
+                    this.$router.push({ name: 'checkout' })
+                })
         },
         async addToBasket(item: Item, options: Options) {
             let thisItem: Item = item;
@@ -116,10 +120,17 @@ export default {
                     </tbody>
                 </table>
                 <p>Order Total: ${{ total.toFixed(2) }}</p>
-                <button class="btn_green" @click="addNewOrder">Place Order</button>
+
+                <section v-if="menuStore.currentUser == null">
+                    <p>You're not signed in!</p>
+                    <Login></Login>
+                </section>
+                <section v-if="menuStore.currentUser !== null">
+                    <button class="btn_green" @click="addNewOrder">Place Order</button>
+                </section>
             </div>
             <div v-else>
-                <h3>{{ basketText }}</h3> {{ menuStore.orders.length }}
+                <h3>{{ basketText }}</h3>
             </div>
         </div>
     </div>
