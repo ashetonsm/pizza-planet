@@ -5,6 +5,16 @@ import type { Item } from '@/stores/Item';
 import RemoveMenuItem from './RemoveMenuItem.vue';
 
 export default {
+    data() {
+        return {
+            displayDetails: false,
+            selectedOrder: {
+                id: -1,
+                status: -1,
+                items: []
+            }
+        }
+    },
     components: {
         NewMenuItem,
         RemoveMenuItem
@@ -17,14 +27,33 @@ export default {
         removeItem(item: Item) {
             useMenuStore().removeItem(item)
         },
+        handleClose() {
+            if (this.displayDetails === false) {
+                this.displayDetails = true;
+            } else {
+
+                this.displayDetails = false
+                this.selectedOrder = {
+                    id: -1,
+                    status: -1,
+                    items: []
+                }
+            }
+        },
         removeOrder(order: any) {
             console.log(order)
             // if (confirm('Remove Order?')) {
             useMenuStore().removeOrder(order)
             // }
         },
-        viewOrder(order: any) {
-            console.log(order)
+        viewOrder(orderIndex: any, orderData: any) {
+            console.log(orderIndex)
+            this.selectedOrder = {
+                id: orderIndex,
+                status: orderData.orderStatus,
+                items: orderData.basket.items
+            }
+            this.handleClose()
         },
     }
 }
@@ -33,6 +62,19 @@ export default {
     <div class="admin_wrapper">
         <NewMenuItem></NewMenuItem>
         <RemoveMenuItem></RemoveMenuItem>
+
+        <section v-if="displayDetails === true">
+            <button class="btn_red" @click="handleClose()">CLOSE</button>
+            <h3>Order #{{ selectedOrder.id }}:</h3>
+            <h2>Status: {{ selectedOrder.status }}</h2>
+            <ul v-for="i in selectedOrder.items as any">
+                <li>{{ i.name }}</li>
+                <li>{{ i.size }}</li>
+                <li>${{ i.price }}</li>
+                <li>Qty: {{ i.quantity }}</li>
+            </ul>
+        </section>
+
         <div class="orders_wrapper">
             <h3>Current Orders:</h3>
             <table>
@@ -58,7 +100,7 @@ export default {
                         <td>Qty: {{ item.quantity }}</td>
                     </tr>
                     <th>{{ usersOrders.orderStatus }}</th>
-                    <th><button class="btn_green" @click="viewOrder(usersOrders)">View</button></th>
+                    <th><button class="btn_green" @click="viewOrder(index, usersOrders)">View</button></th>
                     </tr>
                 </tbody>
             </table>
