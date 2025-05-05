@@ -27,13 +27,13 @@ export const useMenuStore = defineStore('menuItems', {
         async setMenuRef() {
             this.menuItems = useCollection(collection(db, 'menu'))
         },
-        async setOrdersRef() {
+        async setOrdersRef(userUID: string) {
             if (this.getAdminStatus == true) {
                 console.log('Displaying all orders for an admin account.')
                 this.orders = useCollection(collection(db, 'orders'))
             } else {
                 console.log('Displaying only orders by logged in non-admin user.')
-                this.orders = useDocument(doc(collection(db, 'orders'), this.currentUser!.uid))
+                this.orders = useDocument(doc(collection(db, 'orders'), userUID))
             }
         },
         async setAdminsRef() {
@@ -50,7 +50,7 @@ export const useMenuStore = defineStore('menuItems', {
         },
         async setAdminStatus() {
             this.admins.forEach((a: { uid: string | undefined; }) => {
-                if (a.uid == this.currentUser?.uid) {
+                if (a.uid == this.getCurrentUser!.uid) {
                     console.log('Logged in user IS an admin')
                     return this.admin = true;
                 }
@@ -62,33 +62,33 @@ export const useMenuStore = defineStore('menuItems', {
             delivery: { street: string; city: string; state: string; zip: string; },
             billing: { street: string; city: string; state: string; zip: string; }) {
             if (this.orders == null) {
-                setDoc(doc(db, 'orders', this.currentUser!.uid), {
+                setDoc(doc(db, 'orders', this.getCurrentUser!.uid), {
                     orders: [{
                         basket: { items: submitted },
                         date: new Date,
-                        user: this.currentUser === null ? '' : this.currentUser?.uid,
+                        user: this.getCurrentUser! === null ? '' : this.getCurrentUser!.uid,
                         paymentInformation: payment,
                         deliveryAddress: delivery,
                         billingAddress: billing
                     }]
                 })
             } else if (await this.orders.length < 1) {
-                setDoc(doc(db, 'orders', this.currentUser!.uid), {
+                setDoc(doc(db, 'orders', this.getCurrentUser!.uid), {
                     orders: [{
                         basket: { items: submitted },
                         date: new Date,
-                        user: this.currentUser === null ? '' : this.currentUser?.uid,
+                        user: this.getCurrentUser! === null ? '' : this.getCurrentUser!.uid,
                         paymentInformation: payment,
                         deliveryAddress: delivery,
                         billingAddress: billing
                     }]
                 })
             } else {
-                await updateDoc(doc(db, 'orders', this.currentUser!.uid), {
+                await updateDoc(doc(db, 'orders', this.getCurrentUser!.uid), {
                     orders: arrayUnion({
                         basket: { items: submitted },
                         date: new Date,
-                        user: this.currentUser === null ? '' : this.currentUser?.uid,
+                        user: this.getCurrentUser! === null ? '' : this.getCurrentUser!.uid,
                         paymentInformation: payment,
                         deliveryAddress: delivery,
                         billingAddress: billing
@@ -98,11 +98,11 @@ export const useMenuStore = defineStore('menuItems', {
                         const errorCode = error.code;
                         const errorMessage = error.message;
                         alert('Error Code: ' + errorCode + '--- Error Message: ' + errorMessage);
-                        setDoc(doc(db, 'orders', this.currentUser!.uid), {
+                        setDoc(doc(db, 'orders', this.getCurrentUser!.uid), {
                             orders: [{
                                 basket: { items: submitted },
                                 date: new Date,
-                                user: this.currentUser === null ? '' : this.currentUser?.uid,
+                                user: this.getCurrentUser! === null ? '' : this.getCurrentUser!.uid,
                                 paymentInformation: payment,
                                 deliveryAddress: delivery,
                                 billingAddress: billing
@@ -127,7 +127,7 @@ export const useMenuStore = defineStore('menuItems', {
                 })
         },
         async removeOrder(submitted: any) {
-            await updateDoc(doc(db, 'orders', this.currentUser!.uid), {
+            await updateDoc(doc(db, 'orders', this.getCurrentUser!.uid), {
                 orders: arrayRemove(submitted)
             })
                 .catch((error) => {
@@ -165,7 +165,7 @@ export const useMenuStore = defineStore('menuItems', {
                     await this.setAdminStatus()
                 })
                 .then(async () => {
-                    await this.setOrdersRef()
+                    await this.setOrdersRef(this.getCurrentUser!.uid)
                 })
                 .catch((error) => {
                     const errorCode = error.code;
