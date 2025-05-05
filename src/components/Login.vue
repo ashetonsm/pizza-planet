@@ -2,10 +2,11 @@
 import { useMenuStore } from '@/stores/store';
 import Register from './Register.vue';
 
-
-
 export default {
     name: "Login",
+    components: {
+        Register
+    },
     data() {
         return {
             email: '',
