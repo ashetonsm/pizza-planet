@@ -22,9 +22,7 @@ export default {
         <section v-if="menuStore.admin === true">
             <Admin></Admin>
         </section>
-        <section v-else="menuStore.admin === false">
-            <OrderHistory></OrderHistory>
-        </section>
+        <OrderHistory v-if="menuStore.admin === false"></OrderHistory>
     </div>
 
     <section v-if="menuStore.currentUser == null">
