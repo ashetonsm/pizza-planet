@@ -11,18 +11,21 @@ export default {
     data() {
         return {
             deliveryAddress: {
+                name: '',
                 street: '',
                 city: '',
                 state: '',
                 zip: '',
             },
             billingAddress: {
+                name: '',
                 street: '',
                 city: '',
                 state: '',
                 zip: '',
             },
             paymentInformation: {
+                name: '',
                 cardNumber: '',
                 cvv: '',
                 expMonth: '',
@@ -51,6 +54,12 @@ export default {
         <p>Billing Information:</p>
         <form class="form">
             <div class="fields">
+                <div class="field">
+                    <label for="city">Billing Name</label>
+                    <div>
+                        <input type="text" name="name" id="billing-name" v-model="billingAddress.name" />
+                    </div>
+                </div>
                 <div class="field">
                     <label for="city">Billing Address</label>
                     <div>
@@ -87,6 +96,12 @@ export default {
 
             <div class="fields" v-if="deliverySameAsBillingAddress == false">
                 <div class="field">
+                    <label for="city">Delivery Name</label>
+                    <div>
+                        <input type="text" name="name" id="delivery-name" v-model="deliveryAddress.name" />
+                    </div>
+                </div>
+                <div class="field">
                     <label for="city">Delivery Address</label>
                     <div>
                         <input type="text" name="address" id="delivery-address" v-model="deliveryAddress.street" />
@@ -113,6 +128,12 @@ export default {
             </div>
 
             <p>Payment Information:</p>
+            <div class="field">
+                <label for="city">Cardholder Name</label>
+                <div>
+                    <input type="text" name="name" id="card-name" v-model="paymentInformation.name" />
+                </div>
+            </div>
             <div>
                 <label for="cardNumber">Credit Card:</label>
                 <input type="text" id="cardNumber" placeholder="5432 1234 55555"
@@ -138,7 +159,7 @@ export default {
                     <option value="11">November</option>
                     <option value="12">December</option>
                 </select>
-                <input type="year" id="expiration-year" v-model="paymentInformation.expYear">
+                <input type="year" id="expiration-year" v-model="paymentInformation.expYear" :maxlength="5">
 
             </div>
             <input id="submit" class="submit btn_green" type="submit" @click.prevent="checkout()" value="Submit" />

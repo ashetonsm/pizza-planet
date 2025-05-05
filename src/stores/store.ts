@@ -58,18 +58,20 @@ export const useMenuStore = defineStore('menuItems', {
         },
         // Creates a new order
         async addOrder(submitted: Item,
-            payment: { cardNumber: string; cvv: string; expMonth: string; expYear: string; },
-            delivery: { street: string; city: string; state: string; zip: string; },
-            billing: { street: string; city: string; state: string; zip: string; }) {
+            payment: { name: string; cardNumber: string; cvv: string; expMonth: string; expYear: string; },
+            delivery: { name: string; street: string; city: string; state: string; zip: string; },
+            billing: { name: string; street: string; city: string; state: string; zip: string; }) {
             if (this.orders == null) {
                 setDoc(doc(db, 'orders', this.getCurrentUser!.uid), {
                     orders: [{
                         basket: { items: submitted },
                         date: new Date,
-                        user: this.getCurrentUser! === null ? '' : this.getCurrentUser!.uid,
+                        uid: this.getCurrentUser!.uid,
+                        userEmail: this.getCurrentUser!.email,
                         paymentInformation: payment,
                         deliveryAddress: delivery,
-                        billingAddress: billing
+                        billingAddress: billing,
+                        orderStatus: 0
                     }]
                 })
             } else if (await this.orders.length < 1) {
@@ -77,10 +79,12 @@ export const useMenuStore = defineStore('menuItems', {
                     orders: [{
                         basket: { items: submitted },
                         date: new Date,
-                        user: this.getCurrentUser! === null ? '' : this.getCurrentUser!.uid,
+                        uid: this.getCurrentUser!.uid,
+                        userEmail: this.getCurrentUser!.email,
                         paymentInformation: payment,
                         deliveryAddress: delivery,
-                        billingAddress: billing
+                        billingAddress: billing,
+                        orderStatus: 0
                     }]
                 })
             } else {
@@ -88,10 +92,12 @@ export const useMenuStore = defineStore('menuItems', {
                     orders: arrayUnion({
                         basket: { items: submitted },
                         date: new Date,
-                        user: this.getCurrentUser! === null ? '' : this.getCurrentUser!.uid,
+                        uid: this.getCurrentUser!.uid,
+                        userEmail: this.getCurrentUser!.email,
                         paymentInformation: payment,
                         deliveryAddress: delivery,
-                        billingAddress: billing
+                        billingAddress: billing,
+                        orderStatus: 0
                     })
                 })
                     .catch((error) => {
@@ -102,10 +108,12 @@ export const useMenuStore = defineStore('menuItems', {
                             orders: [{
                                 basket: { items: submitted },
                                 date: new Date,
-                                user: this.getCurrentUser! === null ? '' : this.getCurrentUser!.uid,
+                                uid: this.getCurrentUser!.uid,
+                                userEmail: this.getCurrentUser!.email,
                                 paymentInformation: payment,
                                 deliveryAddress: delivery,
-                                billingAddress: billing
+                                billingAddress: billing,
+                                orderStatus: 0
                             }]
                         })
                     })
