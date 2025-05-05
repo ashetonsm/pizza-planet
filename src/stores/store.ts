@@ -25,7 +25,7 @@ export const useMenuStore = defineStore('menuItems', {
     },
     actions: {
         async setMenuRef() {
-            this.menuItems = useCollection(collection(db, 'menu'))
+            this.menuItems = useCollection(collection(db, 'menu'), { once: true })
         },
         async setOrdersRef(userUID: string) {
             if (this.getAdminStatus == true) {
@@ -37,7 +37,7 @@ export const useMenuStore = defineStore('menuItems', {
             }
         },
         async setAdminsRef() {
-            this.admins = useCollection(collection(db, 'admins'))
+            this.admins = useCollection(collection(db, 'admins'), { once: true })
         },
         async setCurrentBasket(newItems: Item) {
             this.currentBasket.push(newItems)
