@@ -21,8 +21,6 @@ export default {
 
 <template>
   <v-app id="inspire" :theme="menuStore.getTheme">
-    <v-container fluid>
-      <Header></Header>
-    </v-container>
+    <Header></Header>
   </v-app>
 </template>
