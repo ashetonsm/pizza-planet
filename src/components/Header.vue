@@ -49,7 +49,9 @@ export default {
             </v-list>
         </v-menu>
     </v-app-bar>
-    <RouterView />
+    <v-container>
+        <RouterView />
+    </v-container>
 </template>
 
 <style lang="css" scoped>
