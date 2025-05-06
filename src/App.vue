@@ -16,5 +16,7 @@ export default {
 </script>
 
 <template>
-  <Header></Header>
+  <v-app id="inspire">
+    <Header></Header>
+  </v-app>
 </template>
