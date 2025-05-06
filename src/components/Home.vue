@@ -9,11 +9,9 @@ export default {
 }
 </script>
 <template>
-    <div class="flex-container">
-        <div class="welcome-message">
-            <h2>Welcome to Pizza Planet!</h2>
-            <p>Feeling Hungry?</p>
-            <button class="order-btn" @click="goToMenu">Let's Order!</button>
-        </div>
-    </div>
+    <v-card title="Welcome to Pizza Planet" subtitle="So good it's out of this world!" text="Feeling Hungry?">
+        <v-card-actions>
+            <v-btn @click="goToMenu">Let's Order!</v-btn>
+        </v-card-actions>
+    </v-card>
 </template>
