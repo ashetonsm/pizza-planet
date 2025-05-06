@@ -1,18 +1,16 @@
-<script setup lang="ts">
+<script lang="ts">
 import Header from './components/Header.vue';
 import { useMenuStore } from './stores/store';
-</script>
 
-<script lang="ts">
 export default {
   name: 'app',
-  components: {
-    appHeader: Header
-  },
-  created() {
-    console.log('HELLO')
+  setup() {
+    console.log('HELLO FROM APP.VUE')
     useMenuStore().setMenuRef()
-    useMenuStore().setOrdersRef()
+    useMenuStore().setAdminsRef()
+  },
+  components: {
+    Header
   }
 }
 </script>

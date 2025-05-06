@@ -1,134 +1,157 @@
 import { defineStore } from 'pinia'
-import { signInWithEmailAndPassword, signOut, type User } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, type User } from 'firebase/auth';
 import { db, firebaseAuth } from '../firebase';
-import { addDoc, collection, deleteDoc, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
-import { Item, menuItemConverter, orderConverter, type Order } from './Item';
+import { arrayRemove, arrayUnion, collection, deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore';
+import { Item } from './Item';
+import { useCollection, useDocument } from 'vuefire';
 
 export const useMenuStore = defineStore('menuItems', {
     state: (): State => {
         return {
             menuItems: [],
+            currentBasket: [],
             orders: [],
-            currentUser: null
+            currentUser: null,
+            admins: [],
+            admin: false
         }
     },
 
     getters: {
         getMenuItems: state => state.menuItems,
         getNumberOfOrders: state => state.orders.length,
-        getCurrentUser: state => state.currentUser?.email
+        getCurrentUser: state => state.currentUser,
+        getAdminStatus: state => state.admin
     },
     actions: {
         async setMenuRef() {
-            const querySnapshot = await getDocs(collection(db, "menu").withConverter(menuItemConverter));
-
-            querySnapshot.forEach(async (doc) => {
-                // doc.data() is never undefined for query doc snapshots
-                console.log(doc.data());
-                const pizzaExists = await (this.menuItems).find(
-                    pizza => pizza.name === doc.data().name
-                )
-
-                if (pizzaExists) {
-                    return
-                } else {
-                    this.menuItems.push(doc.data())
-                }
-
-            });
-            console.log('Menu Items:')
-            console.log(this.menuItems)
+            this.menuItems = useCollection(collection(db, 'menu'), { once: true })
         },
-        async setOrdersRef() {
-            const querySnapshot = await getDocs(collection(db, "orders"));
-
-            // Clear the local orders list
-            this.orders = [];
-            querySnapshot.forEach(async (doc) => {
-                // Orders is an array of Basket[]
-                // Each Basket contains an array of Items[] from the menu
-                // Each Item from the menu is an {Item} object
-
-                this.orders.push(doc.data().basket)
-
-
-            });
-            console.log('Orders:')
-            console.log(this.orders)
-        },
-        async addOrder(submitted: Item) {
-            // Set with menuItemConverter
-            console.log(submitted)
-            const basket = {
-                items: submitted,
-                date: new Date,
+        async setOrdersRef(userUID: string) {
+            if (this.getAdminStatus == true) {
+                console.log('Displaying all orders for an admin account.')
+                this.orders = useCollection(collection(db, 'orders'))
+            } else {
+                console.log('Displaying only orders by logged in non-admin user.')
+                this.orders = useDocument(doc(collection(db, 'orders'), userUID))
             }
-
-            // adds an order
-            const docRef = ((await addDoc(collection(db, "orders"), { basket })).withConverter(orderConverter))
-            console.log(docRef)
-            this.setOrdersRef()
-
         },
-        async addNewPizza(pizza: Item) {
-            // Set with menuItemConverter
-            console.log(pizza)
-            const ref = doc(db, "menu", pizza.name).withConverter(menuItemConverter);
-            console.log(ref)
-            // Adds or updates a doc with the same ref. setDoc() requires an id (pizza.name above)
-            await setDoc(ref, new Item(pizza.name, pizza.description, pizza.quantity, pizza.options))
-                .then(() => {
-                    this.setMenuRef()
+        async setAdminsRef() {
+            this.admins = useCollection(collection(db, 'admins'), { once: true })
+        },
+        async setCurrentBasket(newItems: Item) {
+            this.currentBasket.push(newItems)
+        },
+        async clearCurrentBasket() {
+            this.currentBasket = []
+        },
+        async clearOrders() {
+            this.orders = []
+        },
+        async setAdminStatus() {
+            this.admins.forEach((a: { uid: string | undefined; }) => {
+                if (a.uid == this.getCurrentUser!.uid) {
+                    console.log('Logged in user IS an admin')
+                    return this.admin = true;
+                }
+            });
+        },
+        // Creates a new order
+        async addOrder(submitted: Item,
+            payment: { name: string; cardNumber: string; cvv: string; expMonth: string; expYear: string; },
+            delivery: { name: string; street: string; city: string; state: string; zip: string; },
+            billing: { name: string; street: string; city: string; state: string; zip: string; }) {
+            if (this.orders == null) {
+                setDoc(doc(db, 'orders', this.getCurrentUser!.uid), {
+                    orders: [{
+                        basket: { items: submitted },
+                        date: new Date,
+                        uid: this.getCurrentUser!.uid,
+                        userEmail: this.getCurrentUser!.email,
+                        paymentInformation: payment,
+                        deliveryAddress: delivery,
+                        billingAddress: billing,
+                        orderStatus: 0
+                    }]
                 })
+            } else if (await this.orders.length < 1) {
+                setDoc(doc(db, 'orders', this.getCurrentUser!.uid), {
+                    orders: [{
+                        basket: { items: submitted },
+                        date: new Date,
+                        uid: this.getCurrentUser!.uid,
+                        userEmail: this.getCurrentUser!.email,
+                        paymentInformation: payment,
+                        deliveryAddress: delivery,
+                        billingAddress: billing,
+                        orderStatus: 0
+                    }]
+                })
+            } else {
+                await updateDoc(doc(db, 'orders', this.getCurrentUser!.uid), {
+                    orders: arrayUnion({
+                        basket: { items: submitted },
+                        date: new Date,
+                        uid: this.getCurrentUser!.uid,
+                        userEmail: this.getCurrentUser!.email,
+                        paymentInformation: payment,
+                        deliveryAddress: delivery,
+                        billingAddress: billing,
+                        orderStatus: 0
+                    })
+                })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        alert('Error Code: ' + errorCode + '--- Error Message: ' + errorMessage);
+                        setDoc(doc(db, 'orders', this.getCurrentUser!.uid), {
+                            orders: [{
+                                basket: { items: submitted },
+                                date: new Date,
+                                uid: this.getCurrentUser!.uid,
+                                userEmail: this.getCurrentUser!.email,
+                                paymentInformation: payment,
+                                deliveryAddress: delivery,
+                                billingAddress: billing,
+                                orderStatus: 0
+                            }]
+                        })
+                    })
+            }
+        },
+        // Adds or updates a doc with the same ref. setDoc() requires an id (i.name above)
+        async addNewMenuItem(i: Item) {
+            setDoc(doc(db, 'menu', i.name), {
+                name: i.name,
+                description: i.description,
+                quantity: i.quantity,
+                options: i.options
+            })
         },
         async removeItem(item: Item) {
-            // Set with menuItemConverter
-            console.log('Removing from menu:')
-            console.log(item)
             await deleteDoc(doc(db, "menu", item.name))
                 .then(() => {
-                    const filteredArray = this.menuItems.filter(function (mi) {
-                        return mi !== item
-                    })
-                    this.menuItems = filteredArray;
+                    alert(item.name + ' deleted from menu.')
                 })
-            alert(item.name + ' deleted from menu.')
-            console.log(this.menuItems)
-
         },
-        async removeOrder(ordered: Order) {
-            // Set with menuItemConverter
-            console.log('Removing from orders:')
-            console.log(ordered)
-
-            const q = query(collection(db, "orders"), where("basket.date", "==", ordered.date));
-            const querySnapshot = await getDocs(q);
-            let toBeDeletedId = '';
-            querySnapshot.forEach((doc) => {
-                // doc.data() is never undefined for query doc snapshots
-                console.log(doc.id, " => ", doc.data());
-                toBeDeletedId = doc.id;
-            });
-
-            await deleteDoc(doc(db, "orders", toBeDeletedId))
-                .then(() => {
-                    const filteredArray = this.orders.filter(function (ord) {
-                        return ord !== ordered
-                    })
-                    this.orders = filteredArray;
+        async removeOrder(submitted: any) {
+            await updateDoc(doc(db, 'orders', this.getCurrentUser!.uid), {
+                orders: arrayRemove(submitted)
+            })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    alert('Error Code: ' + errorCode + '--- Error Message: ' + errorMessage);
                 })
-            alert('Order deleted from menu.')
-            console.log(this.orders)
-
         },
         userStatus(user: User | null) {
             user === null ? this.currentUser = null : this.currentUser = user
         },
-        async signIn(username: string, password: string) {
-            signInWithEmailAndPassword(firebaseAuth, username, password)
+        async createUser(email: string, password: string) {
+            createUserWithEmailAndPassword(firebaseAuth, email, password)
                 .then((userCredential) => {
-                    //Signed in
                     const user = userCredential.user;
+                    console.log('Successfully created new user:', userCredential.user.uid);
                     alert('Welcome, ' + user.email);
                     this.currentUser = user;
                 })
@@ -138,21 +161,46 @@ export const useMenuStore = defineStore('menuItems', {
                     alert('Error Code: ' + errorCode + '--- Error Message: ' + errorMessage);
                 })
         },
+        async signIn(username: string, password: string) {
+            signInWithEmailAndPassword(firebaseAuth, username, password)
+                .then((userCredential) => {
+                    //Signed in
+                    const user = userCredential.user;
+                    alert('Welcome, ' + user.email);
+                    this.currentUser = user;
+                })
+                .then(async () => {
+                    await this.setAdminStatus()
+                })
+                .then(async () => {
+                    await this.setOrdersRef(this.getCurrentUser!.uid)
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    alert('Error Code: ' + errorCode + '--- Error Message: ' + errorMessage);
+                })
+
+        },
         async signOut() {
             signOut(firebaseAuth).then(() => {
                 // Sign-out successful.
                 alert('You have been signed out. Goodbye!');
                 this.userStatus(null)
+                this.clearOrders()
+                this.admin = false
             }).catch((error) => {
                 // An error occurred.
                 alert(`Sign out error: ${error}`);
             })
-
         }
     }
 })
 interface State {
-    menuItems: Item[],
-    orders: Order[],
+    menuItems: any,
+    currentBasket: any,
+    orders: any,
     currentUser: User | null
+    admin: boolean
+    admins: any
 }

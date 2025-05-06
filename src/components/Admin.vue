@@ -1,84 +1,109 @@
 <script lang="ts">
-import NewPizza from './NewPizza.vue';
-import Login from './Login.vue';
+import NewMenuItem from './NewMenuItem.vue';
 import { useMenuStore } from '@/stores/store';
-import type { Item, Order } from '@/stores/Item';
+import type { Item } from '@/stores/Item';
+import RemoveMenuItem from './RemoveMenuItem.vue';
 
 export default {
-    name: "Admin",
+    data() {
+        return {
+            displayDetails: false,
+            selectedOrder: {
+                id: -1,
+                status: -1,
+                items: []
+            }
+        }
+    },
     components: {
-        NewPizza,
-        Login
+        NewMenuItem,
+        RemoveMenuItem
     },
     setup() {
         const menuStore = useMenuStore()
         return { menuStore }
     },
     methods: {
-        signOut() {
-            useMenuStore().signOut()
-        },
         removeItem(item: Item) {
             useMenuStore().removeItem(item)
         },
-        removeOrder(order: Order) {
+        handleClose() {
+            if (this.displayDetails === false) {
+                this.displayDetails = true;
+            } else {
+
+                this.displayDetails = false
+                this.selectedOrder = {
+                    id: -1,
+                    status: -1,
+                    items: []
+                }
+            }
+        },
+        removeOrder(order: any) {
+            console.log(order)
+            // if (confirm('Remove Order?')) {
             useMenuStore().removeOrder(order)
-        }
+            // }
+        },
+        viewOrder(orderIndex: any, orderData: any) {
+            console.log(orderIndex)
+            this.selectedOrder = {
+                id: orderIndex,
+                status: orderData.orderStatus,
+                items: orderData.basket.items
+            }
+            this.handleClose()
+        },
     }
 }
 </script>
 <template>
     <div class="admin_wrapper">
-        <section v-if="menuStore.currentUser !== null">
+        <NewMenuItem></NewMenuItem>
+        <RemoveMenuItem></RemoveMenuItem>
 
-            <div class="current_user_wrapper">
-                <span>Logged in as: {{ menuStore.currentUser?.email }}</span>
-                <button type="button" class="btn_red" @click="signOut()">Sign Out</button>
-            </div>
-            <NewPizza></NewPizza>
-            <div class="menu_wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>
-                                Item:
-                            </th>
-                            <th>
-                                Remove from Menu
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody v-for="item in menuStore.getMenuItems as any" :key="item.name">
-                        <tr>
-                            <td>{{ item.name }}</td>
-                            <td>
-                                <button type="button" class="btn_red" @click="removeItem(item)">&times;</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="orders_wrapper">
-                <h3>Current Orders: ({{ menuStore.getNumberOfOrders }})</h3>
-                <table>
-                    <tbody v-for="(order, index) in menuStore.orders" :key="index">
-                        <tr class="order_number">
-                            <th colspan="4">
-                                <strong>Order Id: {{ index + 1 }}</strong>
-                                <button type="button" class="btn_red" @click="removeOrder(order)">&times;</button>
-                            </th>
-                        </tr>
-                        <tr v-for="orderItem in order.items as Item[]" :key="orderItem.name + index">
-                            <td>{{ orderItem.name }}</td>
-                            <td>${{ orderItem.price }}</td>
-                            <td>{{ orderItem.size }}"</td>
-                            <td>Qty: {{ orderItem.quantity }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <section v-if="displayDetails === true">
+            <button class="btn_red" @click="handleClose()">CLOSE</button>
+            <h3>Order #{{ selectedOrder.id }}:</h3>
+            <h2>Status: {{ selectedOrder.status }}</h2>
+            <ul v-for="i in selectedOrder.items as any">
+                <li>{{ i.name }}</li>
+                <li>{{ i.size }}</li>
+                <li>${{ i.price }}</li>
+                <li>Qty: {{ i.quantity }}</li>
+            </ul>
         </section>
 
-        <Login v-if="menuStore.currentUser == null" />
+        <div class="orders_wrapper">
+            <h3>Current Orders:</h3>
+            <table>
+                <!-- Now an array of orders -->
+                <tbody v-for="(orderArray, index) in menuStore.orders" :key="index">
+                    <tr class="order_number">
+                        <th>Remove Order</th>
+                        <th>Email</th>
+                        <th>Basket</th>
+                        <th>Order Status</th>
+                        <th>Details</th>
+                    </tr>
+                    <!-- Now an array of order objects -->
+                    <tr v-for="(usersOrders, index) in orderArray.orders as any" :key="usersOrders.date + index">
+                        <th><button class="btn_red remove-order-button" @click="removeOrder(usersOrders)">Remove
+                                Order</button></th>
+                        <th>{{ usersOrders.userEmail }}</th>
+                    <tr v-for="(item, index) in usersOrders.basket.items"
+                        :key="item.name + item.size + item.quantity + index">
+                        {{ item.name }}
+                        <td>{{ item.size }}"</td>
+                        <td>${{ item.price }}</td>
+                        <td>Qty: {{ item.quantity }}</td>
+                    </tr>
+                    <th>{{ usersOrders.orderStatus }}</th>
+                    <th><button class="btn_green" @click="viewOrder(index, usersOrders)">View</button></th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import Admin from '@/components/Admin.vue';
+import Forbidden from '@/components/Forbidden.vue';
 </script>
 
 <template>
     <main>
-        <Admin></Admin>
+        <Forbidden />
     </main>
 </template>

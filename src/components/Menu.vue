@@ -5,8 +5,12 @@ type Options = {
 }
 import type { Item } from '@/stores/Item';
 import { useMenuStore } from '@/stores/store.ts'
+import Login from './Login.vue';
 
 export default {
+    components: {
+        Login
+    },
     data() {
         return {
             basket: [],
@@ -19,9 +23,12 @@ export default {
     },
     methods: {
         addNewOrder() {
-            this.menuStore.addOrder(this.basket as unknown as Item)
-            this.basket = [];
-            this.basketText = 'Thank you, your order has been placed!'
+            this.menuStore.setCurrentBasket(this.basket as unknown as Item)
+                .then(() => {
+                    this.basket = [];
+                    this.basketText = 'Thank you, your order has been placed!'
+                    this.$router.push({ name: 'checkout' })
+                })
         },
         async addToBasket(item: Item, options: Options) {
             let thisItem: Item = item;
@@ -80,17 +87,24 @@ export default {
             <table v-for="item in menuStore.menuItems as any" :key="item.name">
                 <tbody>
                     <tr>
-                        <td><strong>~{{ item.name }}~</strong></td>
+                        <td>
+                            <p class="menu-item-name">{{ item.name }}</p>
+                        </td>
                     </tr>
                     <tr>
                         <td>
-                            <small>{{ item.description }}
-                            </small>
+                            <p class="menu-item-description">{{ item.description }}</p>
                         </td>
                     </tr>
                     <tr v-for="(option, index) in item.options">
-                        <td :key="index">{{ option.size }}"</td>
-                        <td :key="index">${{ option.price }}</td>
+                        <td :key="index">
+                            <p class="menu-item-size">
+                                {{ option.size }}"
+                            </p>
+                        </td>
+                        <td :key="index">
+                            <p class="menu-item-price">${{ option.price }}</p>
+                        </td>
                         <td><button type="button" class="btn_green"
                                 @click="addToBasket(item as never, option)">+</button></td>
                     </tr>
@@ -101,7 +115,6 @@ export default {
         <div class="basket">
             <h1>Basket:</h1>
             <div v-if="basket.length > 0">
-
                 <table>
                     <tbody v-for="(item, index) in basket as any" :key="index">
                         <tr>
@@ -116,10 +129,17 @@ export default {
                     </tbody>
                 </table>
                 <p>Order Total: ${{ total.toFixed(2) }}</p>
-                <button class="btn_green" @click="addNewOrder">Place Order</button>
+
+                <section v-if="menuStore.currentUser == null">
+                    <p>You're not signed in!</p>
+                    <Login></Login>
+                </section>
+                <section v-if="menuStore.currentUser !== null">
+                    <button class="btn_green" @click="addNewOrder">Place Order</button>
+                </section>
             </div>
             <div v-else>
-                <h3>{{ basketText }}</h3> {{ menuStore.orders.length }}
+                <h3>{{ basketText }}</h3>
             </div>
         </div>
     </div>

@@ -1,6 +1,11 @@
 <script lang="ts">
+import { RouterLink, RouterView } from 'vue-router';
+
 export default {
-    name: "appHeader"
+    components: {
+        RouterLink,
+        RouterView
+    }
 };
 </script>
 
@@ -24,7 +29,7 @@ export default {
                         <RouterLink :to="{ name: 'about' }">About</RouterLink>
                     </li>
                     <li>
-                        <RouterLink :to="{ name: 'admin' }">ADMIN</RouterLink>
+                        <RouterLink :to="{ name: 'account' }">Account</RouterLink>
                     </li>
                 </ul>
             </nav>
