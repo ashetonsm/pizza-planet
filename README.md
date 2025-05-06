@@ -22,7 +22,7 @@ A TypeScript version of a full stack Firebase application. Based on a tutorial b
 - [ ] Add dark/light mode
 - [ ] Simulate order progress
 - [x] Add customer user functionality
-- [ ] Add customer order history
+- [x] Add customer order history
 - [ ] Create footer
 - [x] Create misc graphics
 - [ ] Add stock images for realism

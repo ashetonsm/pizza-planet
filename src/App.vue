@@ -8,6 +8,9 @@ export default {
     console.log('HELLO FROM APP.VUE')
     useMenuStore().setMenuRef()
     useMenuStore().setAdminsRef()
+  },
+  components: {
+    Header
   }
 }
 </script>

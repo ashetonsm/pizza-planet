@@ -5,14 +5,20 @@ import { createPinia } from 'pinia'
 import { firebaseApp } from './firebase'
 
 import App from './App.vue'
-import router from './router'
-import { VueFire, VueFireAuth } from 'vuefire'
-import Header from './components/Header.vue'
-import Admin from './components/Admin.vue'
-import Login from './components/Login.vue'
-import Register from './components/Register.vue'
-import OrderHistory from './components/OrderHistory.vue'
-import AccountInformation from '@/components/AccountInformation.vue';
+import { getCurrentUser, VueFire, VueFireAuth } from 'vuefire'
+import { createRouter, createWebHistory } from 'vue-router'
+import { routes } from './router/routes'
+
+const router = createRouter({
+    history: createWebHistory(import.meta.env.BASE_URL),
+    routes
+})
+router.beforeEach(async (to, from) => {
+    const user = await getCurrentUser()
+    if (to.meta.isProtected && !user) {
+        return { name: 'forbidden' }
+    }
+})
 
 const app = createApp(App)
 
@@ -25,12 +31,5 @@ app.use(VueFire, {
     ]
 
 })
-
-app.component('Header', Header)
-app.component('Admin', Admin)
-app.component('Login', Login)
-app.component('Register', Register)
-app.component('OrderHistory', OrderHistory)
-app.component('AccountInformation', AccountInformation)
 
 app.mount('#app')

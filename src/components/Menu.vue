@@ -8,6 +8,9 @@ import { useMenuStore } from '@/stores/store.ts'
 import Login from './Login.vue';
 
 export default {
+    components: {
+        Login
+    },
     data() {
         return {
             basket: [],
@@ -84,17 +87,24 @@ export default {
             <table v-for="item in menuStore.menuItems as any" :key="item.name">
                 <tbody>
                     <tr>
-                        <td><strong>~{{ item.name }}~</strong></td>
+                        <td>
+                            <p class="menu-item-name">{{ item.name }}</p>
+                        </td>
                     </tr>
                     <tr>
                         <td>
-                            <small>{{ item.description }}
-                            </small>
+                            <p class="menu-item-description">{{ item.description }}</p>
                         </td>
                     </tr>
                     <tr v-for="(option, index) in item.options">
-                        <td :key="index">{{ option.size }}"</td>
-                        <td :key="index">${{ option.price }}</td>
+                        <td :key="index">
+                            <p class="menu-item-size">
+                                {{ option.size }}"
+                            </p>
+                        </td>
+                        <td :key="index">
+                            <p class="menu-item-price">${{ option.price }}</p>
+                        </td>
                         <td><button type="button" class="btn_green"
                                 @click="addToBasket(item as never, option)">+</button></td>
                     </tr>
@@ -105,7 +115,6 @@ export default {
         <div class="basket">
             <h1>Basket:</h1>
             <div v-if="basket.length > 0">
-
                 <table>
                     <tbody v-for="(item, index) in basket as any" :key="index">
                         <tr>
