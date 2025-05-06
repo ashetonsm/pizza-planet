@@ -1,11 +1,12 @@
 <script lang="ts">
 import { RouterLink, RouterView } from 'vue-router';
-import PPLogo from '../assets/images/PPLogo.png'
 import { ref } from 'vue'
+import { useMenuStore } from '@/stores/store';
 
 export default {
     setup() {
-        const theme = ref('light')
+        const menuStore = useMenuStore()
+        return { menuStore }
     },
     components: {
         RouterLink,
@@ -24,7 +25,7 @@ export default {
     },
     methods: {
         onClick() {
-            this.theme = this.theme === 'light' ? 'dark' : 'light'
+            useMenuStore().setTheme()
         }
     }
 };
@@ -34,8 +35,8 @@ export default {
     <v-app-bar>
         <img class="header-logo" src="../assets/images/PPLogo.png" />
         <v-app-bar-title>Pizza Planet</v-app-bar-title>
-        <v-btn :prepend-icon="theme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'" text="Toggle Theme" slim
-            @click="onClick()"></v-btn>
+        <v-btn :prepend-icon="menuStore.getTheme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
+            text="Toggle Theme" slim @click="onClick()"></v-btn>
         <v-menu>
             <template v-slot:activator="{ props }">
                 <v-btn icon="mdi-dots-vertical" variant="text" v-bind="props"></v-btn>

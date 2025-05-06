@@ -4,6 +4,7 @@ import { db, firebaseAuth } from '../firebase';
 import { arrayRemove, arrayUnion, collection, deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { Item } from './Item';
 import { useCollection, useDocument } from 'vuefire';
+import { ref, type Ref } from 'vue';
 
 export const useMenuStore = defineStore('menuItems', {
     state: (): State => {
@@ -13,7 +14,8 @@ export const useMenuStore = defineStore('menuItems', {
             orders: [],
             currentUser: null,
             admins: [],
-            admin: false
+            admin: false,
+            theme: ref('light')
         }
     },
 
@@ -21,7 +23,8 @@ export const useMenuStore = defineStore('menuItems', {
         getMenuItems: state => state.menuItems,
         getNumberOfOrders: state => state.orders.length,
         getCurrentUser: state => state.currentUser,
-        getAdminStatus: state => state.admin
+        getAdminStatus: state => state.admin,
+        getTheme: state => state.theme
     },
     actions: {
         async setMenuRef() {
@@ -38,6 +41,17 @@ export const useMenuStore = defineStore('menuItems', {
         },
         async setAdminsRef() {
             this.admins = useCollection(collection(db, 'admins'), { once: true })
+        },
+        async setThemeRef() {
+            this.theme = ref('light').value
+        },
+        setTheme() {
+            console.log(this.theme)
+            if (this.theme == 'light') {
+                this.theme = 'dark'
+            } else {
+                this.theme = 'light'
+            }
         },
         async setCurrentBasket(newItems: Item) {
             this.currentBasket.push(newItems)
@@ -203,4 +217,5 @@ interface State {
     currentUser: User | null
     admin: boolean
     admins: any
+    theme: Ref<string, string> | undefined
 }
