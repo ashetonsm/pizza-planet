@@ -7,10 +7,20 @@ import History from '@/components/History.vue';
 
 <template>
   <v-main>
-    <v-container fluid>
+    <v-container>
+      <Home />
+    </v-container>
+
+    <v-container>
       <v-row>
-        <v-col v-for="n in 3" :key="n" cols="4">
-          <v-card height="200"></v-card>
+        <v-col cols="4">
+          <Delivery />
+        </v-col>
+        <v-col cols="4">
+          <History />
+        </v-col>
+        <v-col cols="4">
+          <OrderGuide />
         </v-col>
       </v-row>
     </v-container>
