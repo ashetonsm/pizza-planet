@@ -3,5 +3,7 @@ import AccountInformation from '@/components/AccountInformation.vue';
 </script>
 
 <template>
-    <AccountInformation></AccountInformation>
+    <v-main>
+        <AccountInformation></AccountInformation>
+    </v-main>
 </template>

@@ -3,7 +3,7 @@ import Forbidden from '@/components/Forbidden.vue';
 </script>
 
 <template>
-    <main>
+    <v-main>
         <Forbidden />
-    </main>
+    </v-main>
 </template>

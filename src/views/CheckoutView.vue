@@ -3,7 +3,7 @@ import Checkout from '@/components/Checkout.vue';
 </script>
 
 <template>
-    <main>
+    <v-main>
         <Checkout />
-    </main>
+    </v-main>
 </template>
