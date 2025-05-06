@@ -7,7 +7,7 @@ import History from '@/components/History.vue';
 
 <template>
   <v-main>
-    <v-container>
+    <v-container fluid>
       <v-row>
         <v-col v-for="n in 3" :key="n" cols="4">
           <v-card height="200"></v-card>

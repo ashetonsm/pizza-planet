@@ -4,7 +4,7 @@ export default {
 }
 </script>
 <template>
-    <div>
+    <v-container fluid>
         <h3>Info Links:</h3>
         <nav>
             <ul class="about-ul">
@@ -20,5 +20,5 @@ export default {
             </ul>
         </nav>
         <RouterView></RouterView>
-    </div>
+    </v-container>
 </template>

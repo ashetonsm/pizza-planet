@@ -78,7 +78,7 @@ export default {
 }
 </script>
 <template>
-    <div class="menu_wrapper">
+    <v-container fluid>
         <!-- Menu -->
         <div class="menu">
             <h1>Menu</h1>
@@ -142,5 +142,5 @@ export default {
                 <h3>{{ basketText }}</h3>
             </div>
         </div>
-    </div>
+    </v-container>
 </template>

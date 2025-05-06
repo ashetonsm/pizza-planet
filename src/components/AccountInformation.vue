@@ -22,7 +22,7 @@ export default {
 }
 </script>
 <template>
-    <div class="current_user_wrapper">
+    <v-container fluid>
         <section v-if="menuStore.currentUser === null">
             <Login></Login>
         </section>
@@ -37,6 +37,6 @@ export default {
             </section>
         </section>
 
-    </div>
+    </v-container>
 
 </template>
