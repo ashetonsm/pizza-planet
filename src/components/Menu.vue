@@ -78,69 +78,63 @@ export default {
 }
 </script>
 <template>
-    <v-container fluid>
-        <!-- Menu -->
-        <div class="menu">
-            <h1>Menu</h1>
+    <!-- Menu -->
+    <h1>Menu</h1>
 
-            <h3>Pizza</h3>
-            <table v-for="item in menuStore.menuItems as any" :key="item.name">
-                <tbody>
-                    <tr>
-                        <td>
-                            <p class="menu-item-name">{{ item.name }}</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <p class="menu-item-description">{{ item.description }}</p>
-                        </td>
-                    </tr>
-                    <tr v-for="(option, index) in item.options">
-                        <td :key="index">
-                            <p class="menu-item-size">
-                                {{ option.size }}"
-                            </p>
-                        </td>
-                        <td :key="index">
-                            <p class="menu-item-price">${{ option.price }}</p>
-                        </td>
-                        <td><button type="button" class="btn_green"
-                                @click="addToBasket(item as never, option)">+</button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <!-- shopping basket -->
-        <div class="basket">
-            <h1>Basket:</h1>
-            <div v-if="basket.length > 0">
-                <table>
-                    <tbody v-for="(item, index) in basket as any" :key="index">
-                        <tr>
-                            <td>
-                                <button class="btn_green" @click="decreaseQuantity(item)">&#8722;</button>
-                                <span>{{ item.quantity }}</span>
-                                <button class="btn_green" @click="increaseQuantity(item)">+</button>
-                            </td>
-                            <td>{{ item.name }} {{ item.size }}"</td>
-                            <td>${{ (item.price * item.quantity).toFixed(2) }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <p>Order Total: ${{ total.toFixed(2) }}</p>
+    <h3>Pizza</h3>
+    <table v-for="item in menuStore.menuItems as any" :key="item.name">
+        <tbody>
+            <tr>
+                <td>
+                    <p class="menu-item-name">{{ item.name }}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="menu-item-description">{{ item.description }}</p>
+                </td>
+            </tr>
+            <tr v-for="(option, index) in item.options">
+                <td :key="index">
+                    <p class="menu-item-size">
+                        {{ option.size }}"
+                    </p>
+                </td>
+                <td :key="index">
+                    <p class="menu-item-price">${{ option.price }}</p>
+                </td>
+                <td><button type="button" class="btn_green" @click="addToBasket(item as never, option)">+</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <!-- shopping basket -->
+    <h1>Basket:</h1>
+    <div v-if="basket.length > 0">
+        <table>
+            <tbody v-for="(item, index) in basket as any" :key="index">
+                <tr>
+                    <td>
+                        <button class="btn_green" @click="decreaseQuantity(item)">&#8722;</button>
+                        <span>{{ item.quantity }}</span>
+                        <button class="btn_green" @click="increaseQuantity(item)">+</button>
+                    </td>
+                    <td>{{ item.name }} {{ item.size }}"</td>
+                    <td>${{ (item.price * item.quantity).toFixed(2) }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Order Total: ${{ total.toFixed(2) }}</p>
 
-                <section v-if="menuStore.currentUser == null">
-                    <p>You're not signed in!</p>
-                    <Login></Login>
-                </section>
-                <section v-if="menuStore.currentUser !== null">
-                    <button class="btn_green" @click="addNewOrder">Place Order</button>
-                </section>
-            </div>
-            <div v-else>
-                <h3>{{ basketText }}</h3>
-            </div>
-        </div>
-    </v-container>
+        <section v-if="menuStore.currentUser == null">
+            <p>You're not signed in!</p>
+            <Login></Login>
+        </section>
+        <section v-if="menuStore.currentUser !== null">
+            <button class="btn_green" @click="addNewOrder">Place Order</button>
+        </section>
+    </div>
+    <div v-else>
+        <h3>{{ basketText }}</h3>
+    </div>
 </template>
