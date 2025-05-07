@@ -37,6 +37,14 @@ export default {
         <v-app-bar-title>Pizza Planet</v-app-bar-title>
         <v-btn :prepend-icon="menuStore.getTheme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
             text="Toggle Theme" slim @click="onClick()"></v-btn>
+
+        <template v-slot:extension>
+            <v-tabs align-tabs="center">
+                <v-tab v-for="tabItem, index in items" :key=tabItem.title :text=tabItem.title :value=tabItem.title
+                    :to=tabItem.name></v-tab>
+            </v-tabs>
+        </template>
+
         <v-menu>
             <template v-slot:activator="{ props }">
                 <v-btn icon="mdi-dots-vertical" variant="text" v-bind="props"></v-btn>
