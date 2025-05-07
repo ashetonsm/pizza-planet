@@ -17,24 +17,24 @@ export default {
             }
 
             useMenuStore().createUser(user.email, user.password);
-        }
+        },
+        async submit(event: any) {
+            this.createUser()
+        },
     }
 }
 </script>
 
 <template>
-    <div class="login_wrapper">
-        <p>Create an Account:</p>
-        <form>
-            <div>
-                <label for="email">Email Address:</label>
-                <input type="email" id="email" v-model="email" placeholder="Enter email">
-            </div>
-            <div>
-                <label for="password">Password:</label>
-                <input type="password" id="password" v-model="password" placeholder="Enter password">
-            </div>
-            <button type="button" class="btn_green" @click.prevent="createUser()">Create Account</button>
-        </form>
-    </div>
+    <v-sheet class="mx-auto" max-width="300">
+        <v-card class="mx-auto px-6 py-8" max-width="344" title="Register">
+
+            <v-form validate-on="submit" @submit.prevent="submit">
+                <v-text-field v-model=email label="Email:" type="email"></v-text-field>
+                <v-text-field v-model=password label="Password:" type="password"></v-text-field>
+
+                <v-btn class="mt-2" text="Submit" type="submit" block></v-btn>
+            </v-form>
+        </v-card>
+    </v-sheet>
 </template>

@@ -1,6 +1,7 @@
 <script lang="ts">
 import { useMenuStore } from '@/stores/store';
 import Register from './Register.vue';
+import { ref } from 'vue';
 
 export default {
     name: "Login",
@@ -19,9 +20,11 @@ export default {
                 username: this.email,
                 password: this.password
             }
-
             useMenuStore().signIn(user.username, user.password);
-        }
+        },
+        async submit(event: any) {
+            this.signIn()
+        },
     }
 }
 
@@ -29,19 +32,18 @@ export default {
 </script>
 
 <template>
-    <div class="login_wrapper">
-        <p>Please Sign In to Continue:</p>
-        <form>
-            <div>
-                <label for="email">Email Address:</label>
-                <input type="email" id="email" v-model="email" placeholder="Enter email">
-            </div>
-            <div>
-                <label for="password">Password:</label>
-                <input type="password" id="password" v-model="password" placeholder="Enter password">
-            </div>
-            <button type="button" class="btn_green" @click.prevent="signIn()">Sign In</button>
-        </form>
-    </div>
+    <p>Please Sign In to Continue:</p>
+
+    <v-sheet class="mx-auto" max-width="300">
+        <v-card class="mx-auto px-6 py-8" max-width="344" title="Sign In">
+
+            <v-form validate-on="submit" @submit.prevent="submit">
+                <v-text-field v-model=email label="Email:" type="email"></v-text-field>
+                <v-text-field v-model=password label="Password:" type="password"></v-text-field>
+
+                <v-btn class="mt-2" text="Submit" type="submit" block></v-btn>
+            </v-form>
+        </v-card>
+    </v-sheet>
     <Register></Register>
 </template>
