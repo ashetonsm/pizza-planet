@@ -4,15 +4,18 @@ export default {
 }
 </script>
 <template>
-    <div>
-        <h2>Welcome to Pizza Planet!</h2>
-        <h3>Contact Us:</h3>
-        <address>
-            <strong>Pizza Planet</strong>
-            <p>123 Pizza Rd.</p>
-            <p>Chicago, IL 60660</p>
-        </address>
-        <h3>Via Email:</h3>
-        <p>email@email.com</p>
-    </div>
+    <v-sheet class="mx-auto" max-width="300">
+        <v-card max-width="50vw">
+            <v-card-item>
+                <div class="text-h6 mb-1 text-center">
+                    Contact Us:
+                </div>
+                <address class="text-center">
+                    <strong>Pizza Planet</strong>
+                    <p>123 Pizza Rd.</p>
+                    <p>Chicago, IL 60660</p>
+                </address>
+            </v-card-item>
+        </v-card>
+    </v-sheet>
 </template>
