@@ -78,63 +78,86 @@ export default {
 }
 </script>
 <template>
-    <!-- Menu -->
-    <h1>Menu</h1>
+    <v-container class="d-flex">
 
-    <h3>Pizza</h3>
-    <table v-for="item in menuStore.menuItems as any" :key="item.name">
-        <tbody>
-            <tr>
-                <td>
-                    <p class="menu-item-name">{{ item.name }}</p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p class="menu-item-description">{{ item.description }}</p>
-                </td>
-            </tr>
-            <tr v-for="(option, index) in item.options">
-                <td :key="index">
-                    <p class="menu-item-size">
-                        {{ option.size }}"
-                    </p>
-                </td>
-                <td :key="index">
-                    <p class="menu-item-price">${{ option.price }}</p>
-                </td>
-                <td><button type="button" class="btn_green" @click="addToBasket(item as never, option)">+</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <!-- shopping basket -->
-    <h1>Basket:</h1>
-    <div v-if="basket.length > 0">
-        <table>
-            <tbody v-for="(item, index) in basket as any" :key="index">
-                <tr>
-                    <td>
-                        <button class="btn_green" @click="decreaseQuantity(item)">&#8722;</button>
-                        <span>{{ item.quantity }}</span>
-                        <button class="btn_green" @click="increaseQuantity(item)">+</button>
-                    </td>
-                    <td>{{ item.name }} {{ item.size }}"</td>
-                    <td>${{ (item.price * item.quantity).toFixed(2) }}</td>
-                </tr>
-            </tbody>
-        </table>
-        <p>Order Total: ${{ total.toFixed(2) }}</p>
+        <v-container class="mx-auto">
+            <h1>Menu</h1>
+            <v-table style="width: 35vw" v-for="item in menuStore.menuItems as any" :key="item.name">
+                <tbody>
+                    <tr>
+                        <td>
+                            <p class="text-h5">{{ item.name }}</p>
+                            <p class="text-subtitle-1">{{ item.description }}</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p class="text-h6 text-left">Size/Qty</p>
+                        </td>
+                        <td>
+                            <p class="text-h6 text-center">Price</p>
+                        </td>
+                        <td>
+                            <p class="text-h6 text-right">Add</p>
+                        </td>
+                    </tr>
 
-        <section v-if="menuStore.currentUser == null">
-            <p>You're not signed in!</p>
-            <Login></Login>
-        </section>
-        <section v-if="menuStore.currentUser !== null">
-            <button class="btn_green" @click="addNewOrder">Place Order</button>
-        </section>
-    </div>
-    <div v-else>
-        <h3>{{ basketText }}</h3>
-    </div>
+                    <tr v-for="(option, index) in item.options">
+                        <td :key="index">
+                            <p class="text-left">
+                                {{ option.size }}"
+                            </p>
+                        </td>
+                        <td :key="index">
+                            <p class="text-center">${{ option.price }}</p>
+                        </td>
+                        <td class="text-right"><v-btn icon="mdi-plus" density="compact"
+                                @click="addToBasket(item as never, option)"></v-btn>
+                        </td>
+                    </tr>
+                </tbody>
+            </v-table>
+        </v-container>
+
+
+        <v-container class="mx-auto">
+            <h1>Basket:</h1>
+            <section v-if="basket.length > 0">
+                <v-table style="width: 35vw">
+                    <tbody>
+                        <tr>
+                            <td class="text-h5 text-center">Qty</td>
+                            <td class="text-h5 text-left">Item</td>
+                            <td class="text-h5 text-left">Price</td>
+                        </tr>
+                        <tr v-for="(item, index) in basket as any" :key="index">
+                            <td class="text-center">
+                                <v-btn class="mr-4" icon="mdi-minus" density="compact"
+                                    @click="decreaseQuantity(item)"></v-btn>
+                                <span class="text-subtitle-1">{{ item.quantity }}</span>
+                                <v-btn class="ml-4" icon="mdi-plus" density="compact"
+                                    @click="increaseQuantity(item)"></v-btn>
+                            </td>
+                            <td class="text-subtitle-1 text-left">{{ item.name }} {{ item.size }}"</td>
+                            <td class="text-subtitle-1">${{ (item.price * item.quantity).toFixed(2) }}</td>
+                        </tr>
+                    </tbody>
+                </v-table>
+                <p class="text-h5">Order Total: ${{ total.toFixed(2) }}</p>
+
+                <section v-if="menuStore.currentUser == null">
+                    <p class="text-h6">You're not signed in!</p>
+                    <Login></Login>
+                </section>
+                <section v-if="menuStore.currentUser !== null">
+                    <v-btn density="compact" @click="addNewOrder">Place Order</v-btn>
+                </section>
+            </section>
+            <section v-else>
+                <h3>{{ basketText }}</h3>
+            </section>
+
+        </v-container>
+    </v-container>
+
 </template>
