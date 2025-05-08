@@ -48,8 +48,6 @@ export default {
     </v-container>
 
     <v-sheet class="mx-auto" max-width="300">
-
-
         <v-card v-if="displayRegistration !== true" class="mx-auto px-6 py-8" max-width="344" title="Sign In">
             <v-form validate-on="submit" @submit.prevent="submit">
                 <v-text-field v-model=email label="Email:" type="email"></v-text-field>
