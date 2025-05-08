@@ -33,21 +33,20 @@ export default {
 
 <template>
     <v-app-bar>
-        <img class="header-logo" src="../assets/images/PPLogo.png" />
+        <img class="header-logo mx-4" src="../assets/images/PPLogo.png" />
         <v-app-bar-title>Pizza Planet</v-app-bar-title>
         <v-btn :prepend-icon="menuStore.getTheme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
-            text="Toggle Theme" slim @click="onClick()"></v-btn>
+            :text="menuStore.getTheme" slim @click="onClick()" class="mx-4"></v-btn>
+        <v-divider vertical></v-divider>
+        <v-tabs class="full-menu-links" fixed-tabs>
+            <v-tab v-for="tabItem, index in items" :key=tabItem.title :text=tabItem.title :value=tabItem.title
+                :to=tabItem.name></v-tab>
+        </v-tabs>
+        <v-divider vertical></v-divider>
 
-        <template v-slot:extension>
-            <v-tabs align-tabs="center">
-                <v-tab v-for="tabItem, index in items" :key=tabItem.title :text=tabItem.title :value=tabItem.title
-                    :to=tabItem.name></v-tab>
-            </v-tabs>
-        </template>
-
-        <v-menu>
+        <v-menu class="hamburger-menu-links">
             <template v-slot:activator="{ props }">
-                <v-btn icon="mdi-dots-vertical" variant="text" v-bind="props"></v-btn>
+                <v-btn icon="mdi-menu" variant="text" v-bind="props"></v-btn>
             </template>
 
             <v-list>
