@@ -59,24 +59,34 @@ export default {
 }
 </script>
 <template>
-    <div class="admin_wrapper">
-        <NewMenuItem></NewMenuItem>
-        <RemoveMenuItem></RemoveMenuItem>
+    <v-card class="mx-auto px-6 text-center" title="Admin Dashboard">
+        <v-card class="mx-auto px-6 text-left" title="Add to Menu">
+            <v-card-item class="align-items-center justify-center">
+                <NewMenuItem />
+            </v-card-item>
+        </v-card>
+        <v-card class="mx-auto px-6" title="Remove From Menu">
+            <v-card-item class="align-items-center justify-center">
+                <RemoveMenuItem />
+            </v-card-item>
+        </v-card>
+    </v-card>
 
-        <section v-if="displayDetails === true">
-            <button class="btn_red" @click="handleClose()">CLOSE</button>
-            <h3>Order #{{ selectedOrder.id }}:</h3>
-            <h2>Status: {{ selectedOrder.status }}</h2>
-            <ul v-for="i in selectedOrder.items as any">
-                <li>{{ i.name }}</li>
-                <li>{{ i.size }}</li>
-                <li>${{ i.price }}</li>
-                <li>Qty: {{ i.quantity }}</li>
-            </ul>
-        </section>
+    <!-- MAKE INTO A MODAL -->
+    <section v-if="displayDetails === true">
+        <button class="btn_red" @click="handleClose()">CLOSE</button>
+        <h3>Order #{{ selectedOrder.id }}:</h3>
+        <h2>Status: {{ selectedOrder.status }}</h2>
+        <ul v-for="i in selectedOrder.items as any">
+            <li>{{ i.name }}</li>
+            <li>{{ i.size }}</li>
+            <li>${{ i.price }}</li>
+            <li>Qty: {{ i.quantity }}</li>
+        </ul>
+    </section>
 
-        <div class="orders_wrapper">
-            <h3>Current Orders:</h3>
+    <v-card class="mx-auto px-6" title="Admin Order Management">
+        <v-card-item class="align-items-center justify-center">
             <table>
                 <!-- Now an array of orders -->
                 <tbody v-for="(orderArray, index) in menuStore.orders" :key="index">
@@ -104,6 +114,6 @@ export default {
                     </tr>
                 </tbody>
             </table>
-        </div>
-    </div>
+        </v-card-item>
+    </v-card>
 </template>
