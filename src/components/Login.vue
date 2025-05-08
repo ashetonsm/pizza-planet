@@ -10,6 +10,7 @@ export default {
     },
     data() {
         return {
+            displayRegistration: false,
             email: '',
             password: ''
         }
@@ -25,6 +26,13 @@ export default {
         async submit(event: any) {
             this.signIn()
         },
+        toggleView(event?: any) {
+            if (this.displayRegistration === false) {
+                this.displayRegistration = true;
+            } else {
+                this.displayRegistration = false
+            }
+        }
     }
 }
 
@@ -32,18 +40,23 @@ export default {
 </script>
 
 <template>
-    <p>Please Sign In to Continue:</p>
+    <v-container class="d-flex">
+        <v-btn-toggle rounded="xl" class="mx-auto">
+            <v-btn :active="displayRegistration === false ? true : false" @click="toggleView">Sign In</v-btn>
+            <v-btn :active="displayRegistration === true ? true : false" @click="toggleView">Register</v-btn>
+        </v-btn-toggle>
+    </v-container>
 
     <v-sheet class="mx-auto" max-width="300">
-        <v-card class="mx-auto px-6 py-8" max-width="344" title="Sign In">
 
+
+        <v-card v-if="displayRegistration !== true" class="mx-auto px-6 py-8" max-width="344" title="Sign In">
             <v-form validate-on="submit" @submit.prevent="submit">
                 <v-text-field v-model=email label="Email:" type="email"></v-text-field>
                 <v-text-field v-model=password label="Password:" type="password"></v-text-field>
-
                 <v-btn class="mt-2" text="Submit" type="submit" block></v-btn>
             </v-form>
         </v-card>
+        <Register v-if="displayRegistration === true"></Register>
     </v-sheet>
-    <Register></Register>
 </template>
