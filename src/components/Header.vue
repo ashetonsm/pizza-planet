@@ -19,6 +19,7 @@ export default {
                 { title: 'Home', name: 'home' },
                 { title: 'Menu', name: 'menu' },
                 { title: 'About', name: 'about' },
+                { title: 'Contact', name: 'contact' },
                 { title: 'Account', name: 'account' },
             ]
         }
