@@ -59,61 +59,14 @@ export default {
 }
 </script>
 <template>
-    <v-card class="mx-auto px-6 text-center" title="Admin Dashboard">
-        <v-card class="mx-auto px-6 text-left" title="Add to Menu">
-            <v-card-item class="align-items-center justify-center">
-                <NewMenuItem />
-            </v-card-item>
-        </v-card>
-        <v-card class="mx-auto px-6" title="Remove From Menu">
-            <v-card-item class="align-items-center justify-center">
-                <RemoveMenuItem />
-            </v-card-item>
-        </v-card>
-    </v-card>
-
-    <!-- MAKE INTO A MODAL -->
-    <section v-if="displayDetails === true">
-        <button class="btn_red" @click="handleClose()">CLOSE</button>
-        <h3>Order #{{ selectedOrder.id }}:</h3>
-        <h2>Status: {{ selectedOrder.status }}</h2>
-        <ul v-for="i in selectedOrder.items as any">
-            <li>{{ i.name }}</li>
-            <li>{{ i.size }}</li>
-            <li>${{ i.price }}</li>
-            <li>Qty: {{ i.quantity }}</li>
-        </ul>
-    </section>
-
-    <v-card class="mx-auto px-6" title="Admin Order Management">
+    <v-card class="mx-auto px-6 text-left" title="Add to Menu">
         <v-card-item class="align-items-center justify-center">
-            <table>
-                <!-- Now an array of orders -->
-                <tbody v-for="(orderArray, index) in menuStore.orders" :key="index">
-                    <tr class="order_number">
-                        <th>Remove Order</th>
-                        <th>Email</th>
-                        <th>Basket</th>
-                        <th>Order Status</th>
-                        <th>Details</th>
-                    </tr>
-                    <!-- Now an array of order objects -->
-                    <tr v-for="(usersOrders, index) in orderArray.orders as any" :key="usersOrders.date + index">
-                        <th><button class="btn_red remove-order-button" @click="removeOrder(usersOrders)">Remove
-                                Order</button></th>
-                        <th>{{ usersOrders.userEmail }}</th>
-                    <tr v-for="(item, index) in usersOrders.basket.items"
-                        :key="item.name + item.size + item.quantity + index">
-                        {{ item.name }}
-                        <td>{{ item.size }}"</td>
-                        <td>${{ item.price }}</td>
-                        <td>Qty: {{ item.quantity }}</td>
-                    </tr>
-                    <th>{{ usersOrders.orderStatus }}</th>
-                    <th><button class="btn_green" @click="viewOrder(index, usersOrders)">View</button></th>
-                    </tr>
-                </tbody>
-            </table>
+            <NewMenuItem />
+        </v-card-item>
+    </v-card>
+    <v-card class="mx-auto px-6" title="Remove From Menu">
+        <v-card-item class="align-items-center justify-center">
+            <RemoveMenuItem />
         </v-card-item>
     </v-card>
 </template>
