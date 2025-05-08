@@ -3,12 +3,14 @@ import { useMenuStore } from '@/stores/store';
 import Admin from './Admin.vue';
 import Login from './Login.vue';
 import OrderHistory from './OrderHistory.vue';
+import AdminOrderHistory from './AdminOrderHistory.vue';
 
 export default {
     components: {
         Admin,
         Login,
         OrderHistory,
+        AdminOrderHistory
     },
     setup() {
         const menuStore = useMenuStore()
@@ -33,8 +35,25 @@ export default {
             </v-card>
         </v-container>
 
-        <v-container class="d-flex" v-if="menuStore.admin === true">
-            <Admin></Admin>
+        <v-container v-if="menuStore.admin === true">
+            <v-expansion-panels>
+                <v-expansion-panel>
+                    <v-expansion-panel-title>
+                        <span class="text-h5">Menu Management</span>
+                    </v-expansion-panel-title>
+                    <v-expansion-panel-text>
+                        <Admin />
+                    </v-expansion-panel-text>
+                </v-expansion-panel>
+                <v-expansion-panel>
+                    <v-expansion-panel-title>
+                        <span class="text-h5">Order Management</span>
+                    </v-expansion-panel-title>
+                    <v-expansion-panel-text>
+                        <AdminOrderHistory />
+                    </v-expansion-panel-text>
+                </v-expansion-panel>
+            </v-expansion-panels>
         </v-container>
 
         <v-container class="d-flex" v-if="menuStore.admin === false && menuStore.currentUser !== null">
