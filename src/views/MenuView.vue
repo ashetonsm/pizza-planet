@@ -3,7 +3,7 @@ import Menu from '../components/Menu.vue'
 </script>
 
 <template>
-    <main>
+    <v-main>
         <Menu></Menu>
-    </main>
+    </v-main>
 </template>

@@ -3,7 +3,8 @@ import NotFound from '@/components/NotFound.vue';
 </script>
 
 <template>
-    <main>
+    <v-main>
         <NotFound></NotFound>
-    </main>
+    </v-main>
+
 </template>

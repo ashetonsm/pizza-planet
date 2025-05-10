@@ -16,26 +16,24 @@ export default {
 </script>
 
 <template>
-    <div class="menu_wrapper">
-        <table>
-            <thead>
-                <tr>
-                    <th>
-                        Item:
-                    </th>
-                    <th>
-                        Remove from Menu
-                    </th>
-                </tr>
-            </thead>
-            <tbody v-for="item in menuStore.getMenuItems as any" :key="item.name">
-                <tr>
-                    <td>{{ item.name }}</td>
-                    <td>
-                        <button type="button" class="btn_red" @click="removeItem(item)">&times;</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <v-table class="d-flex">
+        <thead class="text-center">
+            <tr>
+                <th>
+                    Item Name
+                </th>
+                <th>
+                    Remove from Menu
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="item in menuStore.getMenuItems as any" :key="item.name">
+                <td class="text-left">{{ item.name }}</td>
+                <td class="text-center">
+                    <v-btn class="mr-4" icon="mdi-delete" density="compact" @click="removeItem(item)"></v-btn>
+                </td>
+            </tr>
+        </tbody>
+    </v-table>
 </template>

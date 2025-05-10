@@ -1,24 +1,34 @@
 <script lang="ts">
 export default {
-    name: "About"
+    name: "About",
+    data() {
+        return {
+            displayHistory: false,
+            displayDelivery: false,
+            displayOrderGuide: false,
+        }
+    },
+    methods: {
+        toggleView(btnValue: any) {
+            console.log(btnValue)
+        }
+    }
 }
 </script>
 <template>
-    <div>
-        <h3>Info Links:</h3>
-        <nav>
-            <ul class="about-ul">
-                <li>
-                    <RouterLink :to="{ name: 'history' }">History</RouterLink>
-                </li>
-                <li>
-                    <RouterLink :to="{ name: 'delivery' }">Delivery</RouterLink>
-                </li>
-                <li>
-                    <RouterLink :to="{ name: 'orderGuide' }">Order Guide</RouterLink>
-                </li>
-            </ul>
-        </nav>
-        <RouterView></RouterView>
-    </div>
+    <v-container class="d-flex">
+        <v-card class="mx-auto" title="Learn More About us!"
+            text="Click one of the links below to discover more about Pizza Planet."></v-card>
+    </v-container>
+    <v-container class="d-flex">
+        <v-btn-toggle rounded="xl" class="mx-auto">
+            <v-btn value="history" :to="{ name: 'history' }" :active="displayHistory === true ? true : false">Company
+                History</v-btn>
+            <v-btn value="orderGuide" :to="{ name: 'orderGuide' }"
+                :active="displayOrderGuide === true ? true : false">How to Order</v-btn>
+            <v-btn value="delivery" :to="{ name: 'delivery' }"
+                :active="displayDelivery === true ? true : false">Delivery Information</v-btn>
+        </v-btn-toggle>
+    </v-container>
+    <RouterView></RouterView>
 </template>

@@ -5,16 +5,22 @@ import { useMenuStore } from './stores/store';
 export default {
   name: 'app',
   setup() {
+    const menuStore = useMenuStore()
     console.log('HELLO FROM APP.VUE')
     useMenuStore().setMenuRef()
     useMenuStore().setAdminsRef()
+    useMenuStore().setThemeRef()
+    return { menuStore }
+
   },
   components: {
     Header
-  }
+  },
 }
 </script>
 
 <template>
-  <Header></Header>
+  <v-app id="inspire" :theme="menuStore.getTheme">
+    <Header></Header>
+  </v-app>
 </template>

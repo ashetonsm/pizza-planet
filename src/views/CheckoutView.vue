@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import Checkout from '@/components/Checkout.vue';
+import Checkout from '@/components/Checkout/Checkout.vue';
 </script>
 
 <template>
-    <main>
+    <v-main>
         <Checkout />
-    </main>
+    </v-main>
 </template>
