@@ -57,7 +57,7 @@ export default {
         </v-container>
 
         <v-container class="d-flex" v-if="menuStore.admin === false && menuStore.currentUser !== null">
-            <v-card class="d-flex mx-auto px-6" title="Order History">
+            <v-card class="mx-auto px-6" title="Order History">
                 <OrderHistory></OrderHistory>
             </v-card>
         </v-container>
