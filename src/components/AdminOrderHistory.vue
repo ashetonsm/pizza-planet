@@ -39,10 +39,9 @@ export default {
             }
         },
         removeOrder(order: any) {
-            console.log(order)
-            // if (confirm('Remove Order?')) {
-            useMenuStore().removeOrder(order)
-            // }
+            if (confirm('Remove Order?')) {
+                useMenuStore().removeOrder(order)
+            }
         },
         viewOrder(orderIndex: any, orderData: any) {
             this.selectedOrder = {
