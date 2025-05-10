@@ -1,5 +1,4 @@
 <script lang="ts">
-import { useMenuStore } from '@/stores/store';
 export default {
     name: "OrderModal",
     props: {
