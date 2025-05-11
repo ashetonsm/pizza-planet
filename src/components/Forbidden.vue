@@ -4,9 +4,5 @@ export default {
 }
 </script>
 <template>
-    <div>
-        <h3>403:</h3>
-        <h2>Forbidden!</h2>
-        <p>You must be signed in to view this page.</p>
-    </div>
+    <v-card title="403 Forbidden:" text="You must be signed in to view this page."></v-card>
 </template>
