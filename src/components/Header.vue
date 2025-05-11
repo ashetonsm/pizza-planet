@@ -2,6 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router';
 import { ref } from 'vue'
 import { useMenuStore } from '@/stores/store';
+import Footer from './Footer.vue';
 
 export default {
     setup() {
@@ -10,7 +11,8 @@ export default {
     },
     components: {
         RouterLink,
-        RouterView
+        RouterView,
+        Footer
     },
     data() {
         return {
@@ -61,6 +63,7 @@ export default {
     <v-container>
         <RouterView />
     </v-container>
+    <Footer></Footer>
 </template>
 
 <style lang="css" scoped>
