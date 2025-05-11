@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import OrderGuide from '@/components/OrderGuide.vue';
+import OrderGuide from '@/components/About/OrderGuide.vue';
 import Home from '../components/Home.vue'
-import Delivery from '@/components/Delivery.vue';
-import History from '@/components/History.vue';
+import Delivery from '@/components/About/Delivery.vue';
+import History from '@/components/About/History.vue';
 </script>
 
 <template>
