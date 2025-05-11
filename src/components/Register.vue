@@ -26,12 +26,12 @@ export default {
 </script>
 
 <template>
-    <v-sheet class="mx-auto" max-width="300">
+    <v-sheet class="mx-auto rounded" max-width="300">
         <v-card class="mx-auto px-6 py-8" max-width="344" title="Register">
             <v-form validate-on="submit" @submit.prevent="submit">
                 <v-text-field v-model=email label="Email:" type="email"></v-text-field>
                 <v-text-field v-model=password label="Password:" type="password"></v-text-field>
-                <v-btn class="mt-2" text="Submit" type="submit" block></v-btn>
+                <v-btn class="mt-2" text="Submit" type="submit" color="primary" block></v-btn>
             </v-form>
         </v-card>
     </v-sheet>

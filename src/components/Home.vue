@@ -1,4 +1,7 @@
 <script lang="ts">
+import carouselBG1 from '../assets/images/carouselBG1.jpg'
+import carouselBG2 from '../assets/images/carouselBG2.jpg'
+import carouselBG3 from '../assets/images/carouselBG3.jpg'
 export default {
     name: "Home",
     methods: {
@@ -9,9 +12,9 @@ export default {
     data() {
         return {
             items: [
-                { header: 'Feeling hungry?', bodyText: 'Our new galaxy pizza is out of this world!', src: "https://placecats.com/600/400" },
-                { header: 'More than meets the pie!', bodyText: 'Check out our revamped sides!', src: "https://placecats.com/600/500" },
-                { header: 'Celebrating our 30th year!', bodyText: 'Three decades of deep dish awaits!', src: "https://placecats.com/600/475" }
+                { header: 'Feeling hungry?', bodyText: 'Our new galaxy pizza is out of this world!', src: carouselBG1 },
+                { header: 'More than meets the pie!', bodyText: 'Check out our revamped sides!', src: carouselBG2 },
+                { header: 'Celebrating our 30th year!', bodyText: 'Three decades of deep dish awaits!', src: carouselBG3 }
             ]
         }
     },

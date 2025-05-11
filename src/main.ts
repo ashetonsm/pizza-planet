@@ -9,6 +9,7 @@ import { routes } from './router/routes'
 import { createVuetify } from 'vuetify'
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
+import colors from 'vuetify/util/colors'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
@@ -37,7 +38,29 @@ app.use(VueFire, {
 })
 const vuetify = createVuetify({
     components,
-    directives
+    directives,
+    theme: {
+        themes: {
+            light: {
+                dark: false,
+                colors: {
+                    primary: colors.pink.darken4,
+                    secondary: colors.pink.accent4,
+                    background: "#E77697",
+                    surface: colors.red.lighten4
+                }
+            },
+            dark: {
+                dark: true,
+                colors: {
+                    primary: colors.pink.darken4,
+                    secondary: colors.pink.accent4,
+                    background: "#510826",
+                    surface: "#190208"
+                }
+            },
+        },
+    }
 })
 app.use(vuetify)
 

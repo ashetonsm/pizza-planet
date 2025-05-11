@@ -2,6 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router';
 import { ref } from 'vue'
 import { useMenuStore } from '@/stores/store';
+import Footer from './Footer.vue';
 
 export default {
     setup() {
@@ -10,7 +11,8 @@ export default {
     },
     components: {
         RouterLink,
-        RouterView
+        RouterView,
+        Footer
     },
     data() {
         return {
@@ -34,8 +36,9 @@ export default {
 
 <template>
     <v-app-bar>
-        <img class="header-logo mx-4" src="../assets/images/PPLogo.png" />
-        <v-app-bar-title>Pizza Planet</v-app-bar-title>
+        <img class="header-logo mx-4" alt="Pizza Planet Logo" src="../assets/images/PPLogo.png"
+            @click="$router.push({ name: 'home' })" style="cursor: pointer;" />
+        <v-app-bar-title @click="$router.push({ name: 'home' })" style="cursor: pointer;">Pizza Planet</v-app-bar-title>
         <v-btn :prepend-icon="menuStore.getTheme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
             :text="menuStore.getTheme" slim @click="onClick()" class="mx-4"></v-btn>
         <v-divider vertical></v-divider>
@@ -60,6 +63,7 @@ export default {
     <v-container>
         <RouterView />
     </v-container>
+    <Footer></Footer>
 </template>
 
 <style lang="css" scoped>

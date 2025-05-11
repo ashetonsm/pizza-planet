@@ -1,13 +1,13 @@
 import HomeView from '@/views/HomeView.vue'
 import AccountView from '@/views/AccountView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
-import History from '@/components/History.vue'
-import Delivery from '@/components/Delivery.vue'
-import OrderGuide from '@/components/OrderGuide.vue'
 import ForbiddenView from '@/views/ForbiddenView.vue'
 import MenuView from '@/views/MenuView.vue'
 import ContactView from '@/views/ContactView.vue'
 import AboutView from '@/views/AboutView.vue'
+import OrderGuide from '@/components/About/OrderGuide.vue'
+import Delivery from '@/components/About/Delivery.vue'
+import History from '@/components/About/History.vue'
 
 export const routes = [
   {
@@ -55,7 +55,6 @@ export const routes = [
   {
     path: '/contact',
     name: 'contact',
-    component: ContactView,
-    meta: { isProtected: true }
+    component: ContactView
   },
 ]

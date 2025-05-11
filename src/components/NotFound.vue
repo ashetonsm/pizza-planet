@@ -4,8 +4,5 @@ export default {
 }
 </script>
 <template>
-    <div>
-        <h3>404:</h3>
-        <h2>Page Not Found!</h2>
-    </div>
+    <v-card title="404:" text="Page Not Found!"></v-card>
 </template>

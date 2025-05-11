@@ -17,12 +17,11 @@ A TypeScript version of a full stack Firebase application. Based on a tutorial b
 
 ### To do:
 - [x] Basic Firebase create/read/write/delete
-- [ ] Prevent unauthorized users from deleting and deleting data via Firestore rules.
-- [ ] Finish styling
-- [ ] Add dark/light mode
-- [ ] Simulate order progress
+- [x] Finish styling
+    - [x] Add dark/light mode  
+    - [x] Create footer
+    - [ ] Finish mobile responsiveness
 - [x] Add customer user functionality
 - [x] Add customer order history
-- [ ] Create footer
-- [x] Create misc graphics
-- [ ] Add stock images for realism
+- [x] Prevent unauthorized users from deleting and deleting data via Firestore rules.
+- [ ] Simulate order progress
