@@ -34,8 +34,9 @@ export default {
 
 <template>
     <v-app-bar>
-        <img class="header-logo mx-4" src="../assets/images/PPLogo.png" />
-        <v-app-bar-title>Pizza Planet</v-app-bar-title>
+        <img class="header-logo mx-4" alt="Pizza Planet Logo" src="../assets/images/PPLogo.png"
+            @click="$router.push({ name: 'home' })" style="cursor: pointer;" />
+        <v-app-bar-title @click="$router.push({ name: 'home' })" style="cursor: pointer;">Pizza Planet</v-app-bar-title>
         <v-btn :prepend-icon="menuStore.getTheme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
             :text="menuStore.getTheme" slim @click="onClick()" class="mx-4"></v-btn>
         <v-divider vertical></v-divider>
