@@ -21,7 +21,7 @@ export default {
             text="Click one of the links below to discover more about Pizza Planet."></v-card>
     </v-container>
     <v-container class="d-flex">
-        <v-btn-toggle rounded="xl" class="mx-auto">
+        <v-btn-toggle rounded="xl" class="mx-auto" color="secondary">
             <v-btn value="history" :to="{ name: 'history' }" :active="displayHistory === true ? true : false">Company
                 History</v-btn>
             <v-btn value="orderGuide" :to="{ name: 'orderGuide' }"

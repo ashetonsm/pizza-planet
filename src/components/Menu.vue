@@ -80,9 +80,9 @@ export default {
 <template>
     <v-container class="d-flex">
 
-        <v-container class="mx-auto">
+        <v-container class="mx-auto rounded">
             <h1>Menu</h1>
-            <v-table style="width: 35vw" v-for="item in menuStore.menuItems as any" :key="item.name">
+            <v-table style="width: 35vw" v-for="item in menuStore.menuItems as any" :key="item.name" class="mt-4 pa-4">
                 <tbody>
                     <tr>
                         <td>
@@ -123,7 +123,7 @@ export default {
         <v-container class="mx-auto">
             <h1>Basket:</h1>
             <section v-if="basket.length > 0">
-                <v-table style="width: 35vw">
+                <v-table style="width: 35vw" class="mt-4 pa-4 rounded">
                     <tbody>
                         <tr>
                             <td class="text-h5 text-center">Qty</td>
@@ -132,11 +132,13 @@ export default {
                         </tr>
                         <tr v-for="(item, index) in basket as any" :key="index">
                             <td class="text-center">
-                                <v-btn class="mr-4" icon="mdi-minus" density="compact"
-                                    @click="decreaseQuantity(item)"></v-btn>
-                                <span class="text-subtitle-1">{{ item.quantity }}</span>
-                                <v-btn class="ml-4" icon="mdi-plus" density="compact"
-                                    @click="increaseQuantity(item)"></v-btn>
+                                <v-btn class="ml-4" icon="mdi-plus" density="compact" @click="increaseQuantity(item)"
+                                    color="success"></v-btn>
+
+                                <span class="text-subtitle-1 mx-2">{{ item.quantity }}</span>
+
+                                <v-btn class="mr-4" icon="mdi-minus" density="compact" @click="decreaseQuantity(item)"
+                                    color="error"></v-btn>
                             </td>
                             <td class="text-subtitle-1 text-left">{{ item.name }} {{ item.size }}"</td>
                             <td class="text-subtitle-1">${{ (item.price * item.quantity).toFixed(2) }}</td>
@@ -150,13 +152,18 @@ export default {
                     <Login></Login>
                 </section>
                 <section v-if="menuStore.currentUser !== null">
-                    <v-btn density="compact" @click="addNewOrder">Place Order</v-btn>
+                    <v-btn @click="addNewOrder" color="success">Place Order</v-btn>
                 </section>
             </section>
             <section v-else>
-                <h3>{{ basketText }}</h3>
+                <v-table style="width: 35vw" class="mt-4 pa-4 rounded">
+                    <tbody>
+                        <tr>
+                            <td class="text-h5 text-center">{{ basketText }}</td>
+                        </tr>
+                    </tbody>
+                </v-table>
             </section>
-
         </v-container>
     </v-container>
 

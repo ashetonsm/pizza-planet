@@ -13,7 +13,7 @@ export default {
 </script>
 
 <template>
-    <v-footer class="text-center d-flex flex-column ga-2 py-4" color="primary">
+    <v-footer class="text-center d-flex flex-column ga-2 py-4" color="surface">
         <div class="d-flex ga-3">
             <v-btn v-for="icon in icons" :key="icon.title" :icon="icon.title" density="comfortable" variant="text"
                 target="_blank" :href="icon.url"></v-btn>
