@@ -82,9 +82,18 @@ export default {
             </v-card>
         </template>
     </v-stepper>
-
-    {{ billingAddress }}
-    {{ deliveryAddress }}
-    {{ paymentInformation }}
-    {{ deliverySameAsBillingAddress }}
 </template>
+
+<style lang="css" scoped>
+.v-parallax--active>.v-img__img {
+    transform: translate3d(0px, 0px, 0px);
+}
+
+.v-ripple__animation {
+    transform: translate3d(0px, 0px, 0px);
+}
+
+.v-color-picker-canvas:hover .v-color-picker-canvas__dot {
+    transform: translate3d(0px, 0px, 0px);
+}
+</style>
