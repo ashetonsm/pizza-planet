@@ -6,7 +6,7 @@ type Options = {
 import type { Item } from '@/stores/Item';
 import { useMenuStore } from '@/stores/store.ts'
 import Login from './Login.vue';
-import { getAuth } from 'firebase/auth';
+import { firebaseAuth } from '@/firebase';
 
 export default {
     components: {
@@ -19,7 +19,7 @@ export default {
         }
     },
     setup() {
-        const auth = getAuth()
+        const auth = firebaseAuth
         const menuStore = useMenuStore()
         return { menuStore, auth }
     },
