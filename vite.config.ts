@@ -12,7 +12,7 @@ export default defineConfig({
     vueJsx(),
     vueDevTools(),
   ],
-  base: "/pizza-planet/",
+  base: "/",
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
