@@ -41,13 +41,11 @@ export default {
             }
         },
         removeOrder(order: any) {
-            console.log(order)
-            // if (confirm('Remove Order?')) {
-            useMenuStore().removeOrder(order)
-            // }
+            if (confirm('Remove Order?')) {
+                useMenuStore().removeOrder(order)
+            }
         },
         viewOrder(orderIndex: any, orderData: any) {
-            console.log(orderIndex)
             this.selectedOrder = {
                 id: orderIndex,
                 status: orderData.orderStatus,

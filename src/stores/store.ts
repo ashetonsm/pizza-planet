@@ -30,10 +30,8 @@ export const useMenuStore = defineStore('menuItems', {
         },
         async setOrdersRef(userUID: string) {
             if (this.getAdminStatus == true) {
-                console.log('Displaying all orders for an admin account.')
                 this.orders = useCollection(collection(db, 'orders'))
             } else {
-                console.log('Displaying only orders by logged in non-admin user.')
                 this.orders = useDocument(doc(collection(db, 'orders'), userUID))
             }
         },
@@ -44,7 +42,6 @@ export const useMenuStore = defineStore('menuItems', {
             this.theme = ref('dark').value
         },
         setTheme() {
-            console.log(this.theme)
             if (this.theme == 'light') {
                 this.theme = 'dark'
             } else {
@@ -63,7 +60,6 @@ export const useMenuStore = defineStore('menuItems', {
         async setAdminStatus() {
             this.admins.forEach((a: { uid: string | undefined; }) => {
                 if (a.uid == firebaseAuth.currentUser!.uid) {
-                    console.log('Logged in user IS an admin')
                     return this.admin = true;
                 }
             });
@@ -160,7 +156,6 @@ export const useMenuStore = defineStore('menuItems', {
             createUserWithEmailAndPassword(firebaseAuth, email, password)
                 .then((userCredential) => {
                     const user = userCredential.user;
-                    console.log('Successfully created new user:', userCredential.user.uid);
                     alert('Welcome, ' + user.email);
                 })
                 .catch((error) => {

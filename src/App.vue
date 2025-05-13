@@ -6,7 +6,6 @@ export default {
   name: 'app',
   setup() {
     const menuStore = useMenuStore()
-    console.log('HELLO FROM APP.VUE')
     useMenuStore().setMenuRef()
     useMenuStore().setThemeRef()
     return { menuStore }
