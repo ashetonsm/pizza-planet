@@ -3,7 +3,13 @@
 export default {
     name: "Billing",
     props: {
-        billingAddress: {},
+        billingAddress: {
+                name: String,
+                street: String,
+                city: String,
+                state: String,
+                zip: String,
+            },
     },
     data() {
         return {
