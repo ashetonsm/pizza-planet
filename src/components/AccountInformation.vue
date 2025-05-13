@@ -4,7 +4,7 @@ import Admin from './Admin.vue';
 import Login from './Login.vue';
 import OrderHistory from './OrderHistory.vue';
 import AdminOrderHistory from './AdminOrderHistory.vue';
-import { getAuth } from 'firebase/auth';
+import { firebaseAuth } from '@/firebase';
 
 export default {
     components: {
@@ -15,7 +15,7 @@ export default {
     },
     setup() {
         const menuStore = useMenuStore()
-        const auth = getAuth()
+        const auth = firebaseAuth
         if (auth.currentUser) {
             menuStore.setAdminsRef()
                 .then(() => {
