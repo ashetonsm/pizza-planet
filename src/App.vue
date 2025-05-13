@@ -1,4 +1,5 @@
 <script lang="ts">
+import { getAuth } from 'firebase/auth';
 import Header from './components/Header.vue';
 import { useMenuStore } from './stores/store';
 
@@ -6,11 +7,18 @@ export default {
   name: 'app',
   setup() {
     const menuStore = useMenuStore()
+    const auth = getAuth()
+    if (auth.currentUser) {
+      menuStore.setAdminStatus()
+        .then(() => {
+          menuStore.setOrdersRef(auth.currentUser!.uid)
+        })
+    }
     console.log('HELLO FROM APP.VUE')
     useMenuStore().setMenuRef()
     useMenuStore().setAdminsRef()
     useMenuStore().setThemeRef()
-    return { menuStore }
+    return { menuStore, auth }
 
   },
   components: {
