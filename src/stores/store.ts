@@ -15,7 +15,7 @@ export const useMenuStore = defineStore('menuItems', {
             currentUser: null,
             admins: [],
             admin: false,
-            theme: ref('light')
+            theme: ref('dark')
         }
     },
 
@@ -43,7 +43,7 @@ export const useMenuStore = defineStore('menuItems', {
             this.admins = useCollection(collection(db, 'admins'), { once: true })
         },
         async setThemeRef() {
-            this.theme = ref('light').value
+            this.theme = ref('dark').value
         },
         setTheme() {
             console.log(this.theme)
