@@ -12,7 +12,6 @@ export const useMenuStore = defineStore('menuItems', {
             menuItems: [],
             currentBasket: [],
             orders: [],
-            currentUser: null,
             admins: [],
             admin: false,
             theme: ref('dark')
@@ -22,7 +21,6 @@ export const useMenuStore = defineStore('menuItems', {
     getters: {
         getMenuItems: state => state.menuItems,
         getNumberOfOrders: state => state.orders.length,
-        getCurrentUser: state => state.currentUser,
         getAdminStatus: state => state.admin,
         getTheme: state => state.theme
     },
@@ -64,7 +62,7 @@ export const useMenuStore = defineStore('menuItems', {
         },
         async setAdminStatus() {
             this.admins.forEach((a: { uid: string | undefined; }) => {
-                if (a.uid == this.getCurrentUser!.uid) {
+                if (a.uid == firebaseAuth.currentUser!.uid) {
                     console.log('Logged in user IS an admin')
                     return this.admin = true;
                 }
@@ -76,12 +74,12 @@ export const useMenuStore = defineStore('menuItems', {
             delivery: { name: string; street: string; city: string; state: string; zip: string; },
             billing: { name: string; street: string; city: string; state: string; zip: string; }) {
             if (this.orders == null) {
-                setDoc(doc(db, 'orders', this.getCurrentUser!.uid), {
+                setDoc(doc(db, 'orders', firebaseAuth.currentUser!.uid), {
                     orders: [{
                         basket: { items: submitted },
                         date: new Date,
-                        uid: this.getCurrentUser!.uid,
-                        userEmail: this.getCurrentUser!.email,
+                        uid: firebaseAuth.currentUser!.uid,
+                        userEmail: firebaseAuth.currentUser!.email,
                         paymentInformation: payment,
                         deliveryAddress: delivery,
                         billingAddress: billing,
@@ -89,12 +87,12 @@ export const useMenuStore = defineStore('menuItems', {
                     }]
                 })
             } else if (await this.orders.length < 1) {
-                setDoc(doc(db, 'orders', this.getCurrentUser!.uid), {
+                setDoc(doc(db, 'orders', firebaseAuth.currentUser!.uid), {
                     orders: [{
                         basket: { items: submitted },
                         date: new Date,
-                        uid: this.getCurrentUser!.uid,
-                        userEmail: this.getCurrentUser!.email,
+                        uid: firebaseAuth.currentUser!.uid,
+                        userEmail: firebaseAuth.currentUser!.email,
                         paymentInformation: payment,
                         deliveryAddress: delivery,
                         billingAddress: billing,
@@ -102,12 +100,12 @@ export const useMenuStore = defineStore('menuItems', {
                     }]
                 })
             } else {
-                await updateDoc(doc(db, 'orders', this.getCurrentUser!.uid), {
+                await updateDoc(doc(db, 'orders', firebaseAuth.currentUser!.uid), {
                     orders: arrayUnion({
                         basket: { items: submitted },
                         date: new Date,
-                        uid: this.getCurrentUser!.uid,
-                        userEmail: this.getCurrentUser!.email,
+                        uid: firebaseAuth.currentUser!.uid,
+                        userEmail: firebaseAuth.currentUser!.email,
                         paymentInformation: payment,
                         deliveryAddress: delivery,
                         billingAddress: billing,
@@ -118,12 +116,12 @@ export const useMenuStore = defineStore('menuItems', {
                         const errorCode = error.code;
                         const errorMessage = error.message;
                         alert('Error Code: ' + errorCode + '--- Error Message: ' + errorMessage);
-                        setDoc(doc(db, 'orders', this.getCurrentUser!.uid), {
+                        setDoc(doc(db, 'orders', firebaseAuth.currentUser!.uid), {
                             orders: [{
                                 basket: { items: submitted },
                                 date: new Date,
-                                uid: this.getCurrentUser!.uid,
-                                userEmail: this.getCurrentUser!.email,
+                                uid: firebaseAuth.currentUser!.uid,
+                                userEmail: firebaseAuth.currentUser!.email,
                                 paymentInformation: payment,
                                 deliveryAddress: delivery,
                                 billingAddress: billing,
@@ -149,7 +147,7 @@ export const useMenuStore = defineStore('menuItems', {
                 })
         },
         async removeOrder(submitted: any) {
-            await updateDoc(doc(db, 'orders', this.getCurrentUser!.uid), {
+            await updateDoc(doc(db, 'orders', firebaseAuth.currentUser!.uid), {
                 orders: arrayRemove(submitted)
             })
                 .catch((error) => {
@@ -158,16 +156,12 @@ export const useMenuStore = defineStore('menuItems', {
                     alert('Error Code: ' + errorCode + '--- Error Message: ' + errorMessage);
                 })
         },
-        userStatus(user: User | null) {
-            user === null ? this.currentUser = null : this.currentUser = user
-        },
         async createUser(email: string, password: string) {
             createUserWithEmailAndPassword(firebaseAuth, email, password)
                 .then((userCredential) => {
                     const user = userCredential.user;
                     console.log('Successfully created new user:', userCredential.user.uid);
                     alert('Welcome, ' + user.email);
-                    this.currentUser = user;
                 })
                 .catch((error) => {
                     const errorCode = error.code;
@@ -181,13 +175,12 @@ export const useMenuStore = defineStore('menuItems', {
                     //Signed in
                     const user = userCredential.user;
                     alert('Welcome, ' + user.email);
-                    this.currentUser = user;
                 })
                 .then(async () => {
                     await this.setAdminStatus()
                 })
                 .then(async () => {
-                    await this.setOrdersRef(this.getCurrentUser!.uid)
+                    await this.setOrdersRef(firebaseAuth.currentUser!.uid)
                 })
                 .catch((error) => {
                     const errorCode = error.code;
@@ -200,7 +193,6 @@ export const useMenuStore = defineStore('menuItems', {
             signOut(firebaseAuth).then(() => {
                 // Sign-out successful.
                 alert('You have been signed out. Goodbye!');
-                this.userStatus(null)
                 this.clearOrders()
                 this.admin = false
             }).catch((error) => {
@@ -214,7 +206,6 @@ interface State {
     menuItems: any,
     currentBasket: any,
     orders: any,
-    currentUser: User | null
     admin: boolean
     admins: any
     theme: Ref<string, string> | undefined
