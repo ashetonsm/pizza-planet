@@ -40,7 +40,6 @@ export default {
             }
         },
         viewOrder(orderIndex: any, orderData: any) {
-            console.log(orderIndex)
             this.selectedOrder = {
                 id: orderIndex,
                 status: orderData.orderStatus,

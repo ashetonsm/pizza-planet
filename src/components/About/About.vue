@@ -10,7 +10,6 @@ export default {
     },
     methods: {
         toggleView(btnValue: any) {
-            console.log(btnValue)
         }
     }
 }

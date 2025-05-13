@@ -22,7 +22,6 @@ export default {
     },
     methods: {
         add() {
-            console.log('hello')
             useMenuStore().addNewMenuItem(this.newMenuItem)
         }
     }

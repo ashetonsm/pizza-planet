@@ -6,6 +6,7 @@ type Options = {
 import type { Item } from '@/stores/Item';
 import { useMenuStore } from '@/stores/store.ts'
 import Login from './Login.vue';
+import { firebaseAuth } from '@/firebase';
 
 export default {
     components: {
@@ -18,8 +19,9 @@ export default {
         }
     },
     setup() {
+        const auth = firebaseAuth
         const menuStore = useMenuStore()
-        return { menuStore }
+        return { menuStore, auth }
     },
     methods: {
         addNewOrder() {
@@ -147,11 +149,11 @@ export default {
                 </v-table>
                 <p class="text-h5">Order Total: ${{ total.toFixed(2) }}</p>
 
-                <section v-if="menuStore.currentUser == null">
+                <section v-if="auth.currentUser == null">
                     <p class="text-h6">You're not signed in!</p>
                     <Login></Login>
                 </section>
-                <section v-if="menuStore.currentUser !== null">
+                <section v-if="auth.currentUser !== null">
                     <v-btn @click="addNewOrder" color="success">Place Order</v-btn>
                 </section>
             </section>
