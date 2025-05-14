@@ -20,10 +20,7 @@ export default {
                 username: this.email,
                 password: this.password
             }
-            useMenuStore().signIn(user.username, user.password);
-        },
-        async submit(event: any) {
-            this.signIn()
+            useMenuStore().signIn(user.username, user.password)
         },
         toggleView(event?: any) {
             if (this.displayRegistration === false) {
@@ -48,7 +45,7 @@ export default {
 
     <v-sheet class="mx-auto rounded" max-width="300">
         <v-card v-if="displayRegistration !== true" class="mx-auto px-6 py-8" max-width="344" title="Sign In">
-            <v-form validate-on="submit" @submit.prevent="submit">
+            <v-form validate-on="submit" @submit.prevent="signIn">
                 <v-text-field v-model=email label="Email:" type="email"></v-text-field>
                 <v-text-field v-model=password label="Password:" type="password"></v-text-field>
                 <v-btn class="mt-2" text="Submit" type="submit" color="primary" block></v-btn>
