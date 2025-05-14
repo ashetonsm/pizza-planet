@@ -3,7 +3,13 @@
 export default {
     name: "Payment",
     props: {
-        paymentInformation: {},
+        paymentInformation: {
+                name: String,
+                cardNumber: String,
+                cvv: String,
+                expMonth: String,
+                expYear: String,
+            },
     },
 }
 </script>

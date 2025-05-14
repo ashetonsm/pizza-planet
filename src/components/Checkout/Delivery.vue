@@ -2,7 +2,13 @@
 export default {
     name: "Delivery",
     props: {
-        deliveryAddress: {},
+        deliveryAddress: {
+                name: String,
+                street: String,
+                city: String,
+                state: String,
+                zip: String,
+            },
     },
     data() {
         return {

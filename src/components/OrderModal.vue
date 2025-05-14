@@ -2,7 +2,10 @@
 export default {
     name: "OrderModal",
     props: {
-        orderView: {},
+        orderView: {
+            basket: [],
+            orderStatus: Number
+        },
     }
 }
 </script>
