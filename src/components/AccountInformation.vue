@@ -29,7 +29,7 @@ export default {
     },
     methods: {
         signOut() {
-            useMenuStore().signOut()
+            this.menuStore.signOut()
         }
     }
 }
