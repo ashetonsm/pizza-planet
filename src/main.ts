@@ -12,6 +12,7 @@ import 'vuetify/styles'
 import colors from 'vuetify/util/colors'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import { useMenuStore } from './stores/store'
 
 
 const router = createRouter({
@@ -20,8 +21,9 @@ const router = createRouter({
 })
 router.beforeEach(async (to, from) => {
     const user = await getCurrentUser()
+    // Protected route requires login
     if (to.meta.isProtected && !user) {
-        return { name: 'forbidden' }
+        return { name: 'login' }
     }
 })
 
