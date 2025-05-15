@@ -7,6 +7,10 @@ export default {
     components: {
         Register
     },
+    setup() {
+        const menuStore = useMenuStore()
+        return { menuStore }
+    },
     data() {
         return {
             displayRegistration: false,
@@ -20,7 +24,8 @@ export default {
                 username: this.email,
                 password: this.password
             }
-            useMenuStore().signIn(user.username, user.password)
+            this.menuStore.signIn(user.username, user.password)
+            this.$router.push({name: 'account'});
         },
         toggleView(event?: any) {
             if (this.displayRegistration === false) {
