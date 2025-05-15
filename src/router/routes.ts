@@ -9,7 +9,6 @@ import OrderGuide from '@/components/About/OrderGuide.vue'
 import Delivery from '@/components/About/Delivery.vue'
 import History from '@/components/About/History.vue'
 import SignInView from '@/views/SignInView.vue'
-import AdminView from '@/views/AdminView.vue'
 
 export const routes = [
   {
