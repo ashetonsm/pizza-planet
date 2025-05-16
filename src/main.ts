@@ -12,34 +12,21 @@ import 'vuetify/styles'
 import colors from 'vuetify/util/colors'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
-import { useMenuStore } from './stores/store'
 
 const app = createApp(App)
 
 app.use(createPinia())
 
-const menuStore = useMenuStore();
-
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes
 })
-router.beforeEach(async (to, from) => {
+router.beforeEach(async (to) => {
     const user = await getCurrentUser()
     // Protected route requires login
     if (to.meta.isProtected) {
         if (!user) {
             return { name: 'login' }
-        } else {
-            if (menuStore.admins.length == 0) {
-                console.log("Admins length is 0, populating.")
-                menuStore.setAdminsRef()
-            }
-            if (!menuStore.admin) {
-                // Set the admin status if it's false
-                console.log("Admins status is false, recalculating...")
-                menuStore.setAdminStatus()
-            }
         }
     }
 })
