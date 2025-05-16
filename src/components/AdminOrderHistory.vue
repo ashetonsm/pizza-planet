@@ -23,7 +23,7 @@ export default {
     },
     methods: {
         removeItem(item: Item) {
-            useMenuStore().removeItem(item)
+            this.menuStore.removeItem(item)
         },
         handleClose() {
             if (this.displayDetails === false) {
@@ -40,7 +40,7 @@ export default {
         },
         removeOrder(order: any) {
             if (confirm('Remove Order?')) {
-                useMenuStore().removeOrder(order)
+                this.menuStore.removeOrder(order)
             }
         },
         viewOrder(orderIndex: any, orderData: any) {
