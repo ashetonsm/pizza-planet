@@ -12,17 +12,7 @@ export default {
     },
     setup() {
         const menuStore = useMenuStore()
-        const auth = firebaseAuth
-        if (auth.currentUser) {
-            menuStore.setAdminsRef()
-                .then(() => {
-                    menuStore.setAdminStatus()
-                })
-                .then(() => {
-                    menuStore.setOrdersRef(auth.currentUser!.uid)
-                })
-        }
-        return { menuStore, auth }
+        return { menuStore }
     },
     methods: {
         signOut() {
