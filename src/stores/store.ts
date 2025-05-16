@@ -143,14 +143,27 @@ export const useMenuStore = defineStore('menuItems', {
                 })
         },
         async removeOrder(submitted: any) {
-            await updateDoc(doc(db, 'orders', firebaseAuth.currentUser!.uid), {
-                orders: arrayRemove(submitted)
-            })
-                .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    alert('Error Code: ' + errorCode + '--- Error Message: ' + errorMessage);
+            // For non-admins
+            if (!this.getAdminStatus) {
+                await updateDoc(doc(db, 'orders', firebaseAuth.currentUser!.uid), {
+                    orders: arrayRemove(submitted)
                 })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        alert('Error Code: ' + errorCode + '--- Error Message: ' + errorMessage);
+                    })
+            } else {
+                // For admins
+                await updateDoc(doc(db, 'orders', submitted.uid), {
+                    orders: arrayRemove(submitted)
+                })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        alert('Error Code: ' + errorCode + '--- Error Message: ' + errorMessage);
+                    })
+            }
         },
         async createUser(email: string, password: string) {
             createUserWithEmailAndPassword(firebaseAuth, email, password)
