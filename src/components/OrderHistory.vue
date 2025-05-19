@@ -23,7 +23,7 @@ export default {
     methods: {
         removeOrder(order: any) {
             if (confirm('Remove Order?')) {
-                useMenuStore().removeOrder(order)
+                this.menuStore.removeOrder(order)
             }
         },
         handleClose() {
