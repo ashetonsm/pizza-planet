@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { db, firebaseAuth } from '../firebase';
-import { arrayRemove, arrayUnion, collection, deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore/lite';
+import { arrayRemove, arrayUnion, collection, deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { Item } from './Item';
 import { useCollection, useDocument } from 'vuefire';
 import { ref, type Ref } from 'vue';
