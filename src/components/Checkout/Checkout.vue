@@ -77,8 +77,8 @@ export default {
             </v-card>
         </template>
         <template v-slot:item.4>
-            <v-card title="Submit" flat>
-                <v-btn color="secondary" @click="checkout()">Submit Order</v-btn>
+            <v-card title=""  flat>
+                <v-btn class="d-flex mx-auto" color="secondary" @click="checkout()">Confirm Order</v-btn>
             </v-card>
         </template>
     </v-stepper>
