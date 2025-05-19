@@ -25,9 +25,8 @@ export default {
                 password: this.password
             }
             this.menuStore.signIn(user.username, user.password)
-            this.$router.push({name: 'account'});
         },
-        toggleView(event?: any) {
+        toggleView() {
             if (this.displayRegistration === false) {
                 this.displayRegistration = true;
             } else {
@@ -50,10 +49,10 @@ export default {
 
     <v-sheet class="mx-auto rounded" max-width="300">
         <v-card v-if="displayRegistration !== true" class="mx-auto px-6 py-8" max-width="344" title="Sign In">
-            <v-form validate-on="submit" @submit.prevent="signIn">
+            <v-form>
                 <v-text-field v-model=email label="Email:" type="email"></v-text-field>
                 <v-text-field v-model=password label="Password:" type="password"></v-text-field>
-                <v-btn class="mt-2" text="Submit" type="submit" color="primary" block></v-btn>
+                <v-btn class="mt-2" @click="signIn" text="Submit" type="button" color="primary" block></v-btn>
             </v-form>
         </v-card>
         <Register v-if="displayRegistration === true"></Register>
