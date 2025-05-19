@@ -180,7 +180,7 @@ export const useMenuStore = defineStore('menuItems', {
         async signIn(username: string, password: string) {
             signInWithEmailAndPassword(firebaseAuth, username, password)
                 .then(() => {
-                    window.location.replace("account")
+                    window.location.replace(import.meta.env.BASE_URL)
                 })
                 .catch((error) => {
                     const errorCode = error.code;
