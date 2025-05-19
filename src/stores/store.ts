@@ -5,6 +5,7 @@ import { arrayRemove, arrayUnion, collection, deleteDoc, doc, setDoc, updateDoc 
 import { Item } from './Item';
 import { useCollection, useDocument } from 'vuefire';
 import { ref, type Ref } from 'vue';
+import router from '@/router';
 
 export const useMenuStore = defineStore('menuItems', {
     state: (): State => {
@@ -179,6 +180,9 @@ export const useMenuStore = defineStore('menuItems', {
         },
         async signIn(username: string, password: string) {
             signInWithEmailAndPassword(firebaseAuth, username, password)
+                .then(() => {
+                    window.location.replace("account")
+                })
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
