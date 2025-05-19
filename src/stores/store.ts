@@ -179,17 +179,6 @@ export const useMenuStore = defineStore('menuItems', {
         },
         async signIn(username: string, password: string) {
             signInWithEmailAndPassword(firebaseAuth, username, password)
-                .then((userCredential) => {
-                    //Signed in
-                    const user = userCredential.user;
-                    alert('Welcome, ' + user.email);
-                })
-                .then(async () => {
-                    await this.setAdminStatus()
-                })
-                .then(async () => {
-                    await this.setOrdersRef(firebaseAuth.currentUser!.uid)
-                })
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
