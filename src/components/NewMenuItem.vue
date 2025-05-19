@@ -7,22 +7,26 @@ export default {
     data() {
         return {
             newMenuItem: {
-                name: 'Eg. Margherita',
-                description: 'Eg. A delicious tomato based pizza topped with mozzarella',
+                name: 'Test Item',
+                description: 'A delicious test item for testing.',
                 quantity: 1,
                 options: [{
-                    size: 9,
-                    price: 6.95
+                    size: 1,
+                    price: 1.99
                 } as Options, {
-                    size: 12,
-                    price: 10.95
+                    size: 2,
+                    price: 2.99
                 } as Options]
             } as Item
         }
     },
+    setup() {
+        const menuStore = useMenuStore()
+        return { menuStore }
+    },
     methods: {
         add() {
-            useMenuStore().addNewMenuItem(this.newMenuItem)
+            this.menuStore.addNewMenuItem(this.newMenuItem)
         }
     }
 }

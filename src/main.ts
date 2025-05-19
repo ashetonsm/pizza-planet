@@ -13,21 +13,26 @@ import colors from 'vuetify/util/colors'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
+const app = createApp(App)
+
+app.use(createPinia())
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes
 })
-router.beforeEach(async (to, from) => {
+router.beforeEach(async (to) => {
     const user = await getCurrentUser()
-    if (to.meta.isProtected && !user) {
-        return { name: 'forbidden' }
+    // Protected route requires login
+    if (to.meta.isProtected) {
+        if (!user) {
+            return { name: 'login' }
+        }
     }
 })
 
-const app = createApp(App)
 
-app.use(createPinia())
+
 app.use(router)
 app.use(VueFire, {
     firebaseApp,

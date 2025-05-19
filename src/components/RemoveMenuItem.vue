@@ -9,7 +9,7 @@ export default {
     },
     methods: {
         removeItem(item: Item) {
-            useMenuStore().removeItem(item)
+            this.menuStore.removeItem(item)
         }
     }
 }

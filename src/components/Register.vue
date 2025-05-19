@@ -9,6 +9,10 @@ export default {
             password: ''
         }
     },
+    setup() {
+        const menuStore = useMenuStore()
+        return { menuStore }
+    },
     methods: {
         createUser() {
             const user = {
@@ -16,7 +20,7 @@ export default {
                 password: this.password
             }
 
-            useMenuStore().createUser(user.email, user.password);
+            this.menuStore.createUser(user.email, user.password);
         },
         async submit(event: any) {
             this.createUser()

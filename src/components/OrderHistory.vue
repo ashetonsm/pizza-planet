@@ -23,7 +23,7 @@ export default {
     methods: {
         removeOrder(order: any) {
             if (confirm('Remove Order?')) {
-                useMenuStore().removeOrder(order)
+                this.menuStore.removeOrder(order)
             }
         },
         handleClose() {
@@ -70,7 +70,7 @@ export default {
                         usersOrders.orderStatus == 1 ? "Ready for Pickup" :
                             usersOrders.orderStatus == 2 ? "Out for Delivery" :
                                 usersOrders.orderStatus == 3 ? "Completed" :
-                                    "Oops! Something went wrong. If this messer persists, please contact the store."
+                                    "Oops! Something went wrong. If this message persists, please contact the store."
                 }}</td>
                 <td class="text-center">
                     <OrderModal :orderView=usersOrders />

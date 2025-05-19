@@ -8,6 +8,7 @@ import AboutView from '@/views/AboutView.vue'
 import OrderGuide from '@/components/About/OrderGuide.vue'
 import Delivery from '@/components/About/Delivery.vue'
 import History from '@/components/About/History.vue'
+import SignInView from '@/views/SignInView.vue'
 
 export const routes = [
   {
@@ -51,10 +52,16 @@ export const routes = [
     path: '/account',
     name: 'account',
     component: AccountView,
+    meta: { isProtected: true }
   },
   {
     path: '/contact',
     name: 'contact',
     component: ContactView
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: SignInView
   },
 ]

@@ -6,10 +6,10 @@ export default {
   name: 'app',
   setup() {
     const menuStore = useMenuStore()
-    useMenuStore().setMenuRef()
-    useMenuStore().setThemeRef()
+    menuStore.setMenuRef()
+    menuStore.setThemeRef()
+    menuStore.setAdminsRef()
     return { menuStore }
-
   },
   components: {
     Header

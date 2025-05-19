@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, type User } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { db, firebaseAuth } from '../firebase';
 import { arrayRemove, arrayUnion, collection, deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { Item } from './Item';
 import { useCollection, useDocument } from 'vuefire';
 import { ref, type Ref } from 'vue';
+import router from '@/router';
 
 export const useMenuStore = defineStore('menuItems', {
     state: (): State => {
@@ -143,14 +144,27 @@ export const useMenuStore = defineStore('menuItems', {
                 })
         },
         async removeOrder(submitted: any) {
-            await updateDoc(doc(db, 'orders', firebaseAuth.currentUser!.uid), {
-                orders: arrayRemove(submitted)
-            })
-                .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    alert('Error Code: ' + errorCode + '--- Error Message: ' + errorMessage);
+            // For non-admins
+            if (!this.getAdminStatus) {
+                await updateDoc(doc(db, 'orders', firebaseAuth.currentUser!.uid), {
+                    orders: arrayRemove(submitted)
                 })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        alert('Error Code: ' + errorCode + '--- Error Message: ' + errorMessage);
+                    })
+            } else {
+                // For admins
+                await updateDoc(doc(db, 'orders', submitted.uid), {
+                    orders: arrayRemove(submitted)
+                })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        alert('Error Code: ' + errorCode + '--- Error Message: ' + errorMessage);
+                    })
+            }
         },
         async createUser(email: string, password: string) {
             createUserWithEmailAndPassword(firebaseAuth, email, password)
@@ -166,16 +180,8 @@ export const useMenuStore = defineStore('menuItems', {
         },
         async signIn(username: string, password: string) {
             signInWithEmailAndPassword(firebaseAuth, username, password)
-                .then((userCredential) => {
-                    //Signed in
-                    const user = userCredential.user;
-                    alert('Welcome, ' + user.email);
-                })
-                .then(async () => {
-                    await this.setAdminStatus()
-                })
-                .then(async () => {
-                    await this.setOrdersRef(firebaseAuth.currentUser!.uid)
+                .then(() => {
+                    window.location.replace("account")
                 })
                 .catch((error) => {
                     const errorCode = error.code;

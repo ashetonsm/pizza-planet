@@ -28,7 +28,7 @@ export default {
             this.menuStore.setCurrentBasket(this.basket as unknown as Item)
                 .then(() => {
                     this.basket = [];
-                    this.basketText = 'Thank you, your order has been placed!'
+                    this.basketText = 'Thank you! Please wait to be redirected...'
                     this.$router.push({ name: 'checkout' })
                 })
         },
@@ -151,7 +151,7 @@ export default {
 
                 <section v-if="auth.currentUser == null">
                     <p class="text-h6">You're not signed in!</p>
-                    <Login></Login>
+                    <v-btn @click="$router.push({name: 'login'})" color="success">Sign In</v-btn>
                 </section>
                 <section v-if="auth.currentUser !== null">
                     <v-btn @click="addNewOrder" color="success">Place Order</v-btn>

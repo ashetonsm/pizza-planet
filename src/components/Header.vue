@@ -28,7 +28,7 @@ export default {
     },
     methods: {
         onClick() {
-            useMenuStore().setTheme()
+            this.menuStore.setTheme()
         }
     }
 };

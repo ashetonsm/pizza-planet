@@ -23,7 +23,7 @@ export default {
     },
     methods: {
         removeItem(item: Item) {
-            useMenuStore().removeItem(item)
+            this.menuStore.removeItem(item)
         },
         handleClose() {
             if (this.displayDetails === false) {
@@ -40,7 +40,7 @@ export default {
         },
         removeOrder(order: any) {
             if (confirm('Remove Order?')) {
-                useMenuStore().removeOrder(order)
+                this.menuStore.removeOrder(order)
             }
         },
         viewOrder(orderIndex: any, orderData: any) {
@@ -55,7 +55,6 @@ export default {
 }
 </script>
 <template>
-    <v-sheet class="mx-auto px-6" title="Admin Order Management">
         <v-table>
             <tr class="text-h5 text-center">
                 <th class="text-center">Remove Order</th>
@@ -75,7 +74,7 @@ export default {
                             usersOrders.orderStatus == 1 ? "Ready for Pickup" :
                                 usersOrders.orderStatus == 2 ? "Out for Delivery" :
                                     usersOrders.orderStatus == 3 ? "Completed" :
-                                        "Oops! Something went wrong. If this messer persists, please contact the store."
+                                        "Oops! Something went wrong. If this message persists, please contact the store."
                     }}</td>
                     <td class="text-center">
                         <OrderModal :orderView=usersOrders />
@@ -83,5 +82,4 @@ export default {
                 </tr>
             </tbody>
         </v-table>
-    </v-sheet>
 </template>
